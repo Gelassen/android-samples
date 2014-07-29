@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    	xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    	android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:layout_marginTop="20dp"
+    	android:orientation="vertical"
+    	android:gravity="center_horizontal" >
+    
+    	<com.facebook.widget.LoginButton
+        	android:id="@+id/fb_login_button"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_marginTop="5dp"
+        	android:background="@null"
+        	facebook:confirm_logout="false"
+        	facebook:fetch_user_info="true" />
+
+    	<TextView
+     		android:id="@+id/user_name"
+     		android:layout_width="wrap_content"
+     		android:layout_height="wrap_content"
+     		android:layout_gravity="center"
+     		android:textSize="18sp"
+     		android:layout_margin="10dp"/>
+     
+    	<Button
+        	android:id="@+id/post_image"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:text="post_image"
+        	android:onClick="postImageClicked" />
+     
+    	<Button
+        	android:id="@+id/update_status"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:text="update_status"
+        	android:onClick="updateStatusClicked" />
+          
+    	<Button
+        	android:id="@+id/pick_place"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:text="pick_place"
+        	android:onClick="pickPlaceClicked" />
+ 	 
+    	<FrameLayout
+        	android:id="@+id/fragment_container"
+        	android:layout_width="fill_parent"
+        	android:layout_height="fill_parent"/>
+
+</LinearLayout>
