@@ -1,0 +1,96 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" 
+    android:padding="24dp">
+
+    <View
+        android:id="@+id/client_separator"
+        style="@style/DefaultSeparator"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="12dp" />
+
+    <TextView
+        android:id="@+id/name_label"
+        style="@style/DefaultTextView"
+        android:layout_below="@id/client_separator"
+        android:text="Имя:         " />
+
+    <EditText
+        android:id="@+id/name"
+        style="@style/DefaultEditText"
+        android:layout_width="match_parent"
+        android:layout_below="@id/client_separator"
+        android:layout_toRightOf="@id/name_label"
+        android:layout_alignBaseline="@id/name_label"
+        android:hint="Ваше имя" />
+
+    <TextView
+        android:id="@+id/phone_label"
+        style="@style/DefaultTextView"
+        android:layout_below="@id/name_label"
+        android:text="Телефон: " />
+
+    <EditText
+        android:id="@+id/phone"
+        style="@style/DefaultEditText"
+        android:layout_below="@id/name_label"
+        android:layout_toRightOf="@id/phone_label"
+        android:hint="Ваш номер телефона" />
+
+    <View
+        android:id="@+id/place_separator"
+        style="@style/DefaultSeparator"
+        android:layout_below="@id/phone"
+        android:layout_marginTop="12dp" />
+
+    <TextView
+        android:id="@+id/pickup_place_label"
+        style="@style/DefaultTextView"
+        android:layout_below="@id/place_separator"
+        android:text="Откуда:    " />
+
+    <EditText
+        android:id="@+id/pickup_place"
+        style="@style/DefaultEditText"
+        android:layout_below="@id/place_separator"
+        android:layout_toRightOf="@id/pickup_place_label"
+        android:hint="Введите адрес"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/deliver_place_label"
+        style="@style/DefaultTextView"
+        android:layout_below="@id/pickup_place_label"
+        android:text="Куда:        " />
+
+    <EditText
+        android:id="@+id/deliver_place"
+        style="@style/DefaultEditText"
+        android:layout_below="@id/pickup_place_label"
+        android:layout_toRightOf="@id/deliver_place_label"
+        android:hint="Введите адрес"
+        android:singleLine="true" />
+
+    <View 
+        android:id="@+id/time_separator"
+        style="@style/DefaultSeparator"
+        android:layout_below="@id/deliver_place"
+        android:layout_marginTop="12dp"/>
+
+    <TextView
+        android:id="@+id/comment_label"
+        style="@style/DefaultTextView"
+        android:layout_below="@id/time_separator"
+        android:text="Комментарий:" />
+
+    <EditText
+        android:id="@+id/comment"
+        style="@style/DefaultEditText"
+        android:layout_width="match_parent"
+        android:layout_below="@id/comment_label" 
+        android:hint="Введите коментарий, если необходимо"/>
+
+</RelativeLayout>

@@ -1,0 +1,19 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <fragment
+        android:id="@+id/links_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        class="com.tsystems.rssreader.ui.LinksFragment" />
+
+    <fragment
+        android:id="@+id/feeds_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        class="com.tsystems.rssreader.ui.FeedsFragment" />
+
+</LinearLayout>

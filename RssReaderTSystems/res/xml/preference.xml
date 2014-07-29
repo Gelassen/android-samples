@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+	<PreferenceCategory 
+        android:title="@string/preference_category_title"
+        android:key="preference_key">
+        
+        <CheckBoxPreference
+            android:key="auto_caching"
+            android:summary="@string/preference_auto_description"
+            android:title="@string/preference_auto_title" 
+            android:defaultValue="true"/>
+        <EditTextPreference 
+            android:key="timer"
+            android:title="@string/preference_timer_title"
+            android:defaultValue="30"/>
+        
+	</PreferenceCategory> 
+
+</PreferenceScreen>
