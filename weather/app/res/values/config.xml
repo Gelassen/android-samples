@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="api_key">1cc25435a6a175ab1f3e28db544bd778</string>
+    <string name="url">http://api.openweathermap.org/data/2.5</string>
+    <string name="url_weather_part">forecast/daily</string>
+    <string name="url_find_city_part">find</string>
+</resources>

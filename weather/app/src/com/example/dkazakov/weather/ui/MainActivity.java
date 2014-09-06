@@ -1,4 +1,4 @@
-package com.example.dkazakov.weather;
+package com.example.dkazakov.weather.ui;
 
 import android.app.Activity;
 
@@ -13,6 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
+import com.example.dkazakov.weather.R;
+import com.example.dkazakov.weather.network.commands.GetCityCommand;
+import com.example.dkazakov.weather.network.commands.GetWeatherCommand;
+
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -20,7 +24,7 @@ public class MainActivity extends Activity
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private NavigationDrawerFragment navigationDrawerFragment;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -32,12 +36,12 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
+        navigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
         // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
+        navigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
@@ -75,7 +79,7 @@ public class MainActivity extends Activity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        if (!navigationDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
@@ -91,10 +95,23 @@ public class MainActivity extends Activity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        final String defaultCity = "London";
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_update_weather:
+                final int defaultCount = 5;
+                new GetWeatherCommand(defaultCity, defaultCount).start(this, null);
+                break;
+
+            case R.id.action_add_city:
+                new GetCityCommand(defaultCity).start(this, null);
+                break;
+
+            default:
+                throw new IllegalArgumentException(
+                        String.format("Did you missed define a logic for %s token?", id));
         }
+
         return super.onOptionsItemSelected(item);
     }
 

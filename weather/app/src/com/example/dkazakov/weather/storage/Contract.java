@@ -5,7 +5,7 @@ import android.provider.BaseColumns;
 
 public class Contract {
 
-    public final static String AUTHORITY = "com.home.xing";
+    public final static String AUTHORITY = "com.example.dkazakov.weather";
     public final static Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
     private final static String _ID = BaseColumns._ID;
@@ -69,20 +69,37 @@ public class Contract {
         public final static String ID = _ID;
         final static String _SQL_ID_TYPE = _PK_AUTOINCREMENT;
         public final static String CITY = "CITY";
+        public final static String LAT = "LAT";
+        final static String _SQL_LAT_TYPE = _TYPE_INTEGER;
+        public final static String LONG = "LONG";
+        final static String _SQL_LONG_TYPE = _TYPE_INTEGER;
+    }
+
+    public final static class CitiesForChoose extends Table {
+        public final static String ID = _ID;
+        final static String _SQL_ID_TYPE = _PK_AUTOINCREMENT;
+        public final static String CITY = "CITY";
+        public final static String COUNTRY = "COUNTRY";
+        public final static String LAT = "LAT";
+        final static String _SQL_LAT_TYPE = _TYPE_INTEGER;
+        public final static String LONG = "LONG";
+        final static String _SQL_LONG_TYPE = _TYPE_INTEGER;
     }
 
     public final static class Weather extends Table {
         public final static String ID = _ID;
         final static String _SQL_ID_TYPE = _PK_AUTOINCREMENT;
-        public final static String CITY = "CITY";
+        public final static String CITY_ID = "CITY";
         public final static String DAY = "DAY";
         final static String _SQL_DAY_TYPE = _TYPE_INTEGER;
         public final static String MAX_TEMP = "MAX_TEMP";
         final static String _SQL_MAX_TEMP_TYPE = _TYPE_INTEGER;
         public final static String MIN_TEMP = "MIN_TEMP";
         final static String _SQL_MIN_TEMP_TYPE = _TYPE_INTEGER;
+        public final static String DAY_TEMP = "DAY_TEMP";
+        final static String _SQL_DAY_TEMP_TYPE = _TYPE_INTEGER;
         public final static String DESC = "DESC";
-        public final static String IMG_URL = "IMG_URL";
+        public final static String ICON = "ICON";
     }
 
 

@@ -15,7 +15,7 @@ import java.util.List;
 
 public class AppOpenHelper extends SQLiteOpenHelper {
 
-    private static final int VERSION = 3;
+    private static final int VERSION = 2;
     private static final String DATABASE = "store.db";
 
     public AppOpenHelper(Context context) {

@@ -139,10 +139,12 @@ public class AppContentProvider extends ContentProvider {
 
     private final static int MATCH_CITY = 0x00000001;
     private final static int MATCH_WEATHER = 0x00000002;
+    private final static int MATCH_CITY_CHOOSE = 0x00000003;
 
     static {
         match(Contract.Cities.class, MATCH_CITY);
         match(Contract.Weather.class, MATCH_WEATHER);
+        match(Contract.CitiesForChoose.class, MATCH_CITY_CHOOSE);
     }
 
 }

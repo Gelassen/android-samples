@@ -8,6 +8,7 @@ import android.os.ResultReceiver;
 import android.util.Log;
 
 
+import com.example.dkazakov.weather.R;
 import com.example.dkazakov.weather.Weather;
 
 import org.apache.http.Header;
@@ -87,5 +88,14 @@ public abstract class HttpCommand extends Command {
         return networkInfo == null ? false : networkInfo.isAvailable() && networkInfo.isConnected();
     }
 
+    protected void addApiKeyHeader(HttpUriRequest httpUriRequest) {
+        final String header = "x-api-key";
+        final String apiKey = context.getString(R.string.api_key);
+        httpUriRequest.addHeader(header, apiKey);
+    }
+    protected static class Headers {
+        public static final String ACCEPT = "x-api-key:APIKEY";
+        public static final String ACCEPT_DEFAULT_VALUE = "application/vnd.github.v3+json";
 
+    }
 }
