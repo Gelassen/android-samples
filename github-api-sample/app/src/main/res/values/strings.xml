@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Xing</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_upload">Upload</string>
+
+    <string name="default_name">Repo</string>
+    <string name="default_description">Description</string>
+    <string name="default_owner">Owner</string>
+
+    <string name="title_choose_browser">Choose browser</string>
+    <string name="title_choose_link">Choose link</string>
+</resources>
