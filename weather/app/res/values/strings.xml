@@ -11,4 +11,20 @@
     <string name="action_update_weather">Update weather</string>
     <string name="action_add_city">Add city</string>
 
+    <!-- Dialogs -->
+    <string name="dialog_add_city_title">Add city</string>
+    <string name="dialog_add_city_positive">Add</string>
+    <string name="dialog_add_city_negative">Cancel</string>
+    <string name="dialog_add_city_msg">Enter the name of the city</string>
+
+    <string name="dialog_choose_city_title">Choose city</string>
+    <string name="dialog_choose_city_positive">Add</string>
+    <string name="dialog_choose_city_negative">Cancel</string>
+    <string name="dialog_choose_city_msg">Cities by request: </string>
+
+    <string name="dialog_delete_city_title">Remove city</string>
+    <string name="dialog_delete_city_positive">Remove</string>
+    <string name="dialog_delete_city_negative">Cancel</string>
+    <string name="dialog_delete_city_msg">Do you want delete %s?</string>
+
 </resources>

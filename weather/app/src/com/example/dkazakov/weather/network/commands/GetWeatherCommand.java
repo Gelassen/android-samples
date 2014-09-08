@@ -22,11 +22,13 @@ import java.util.LinkedList;
 
 public class GetWeatherCommand extends HttpCommand {
 
-    private String city;
+    public static final int DEFAULT_COUNT = 5;
+
+    private long id;
     private int count;
 
-    public GetWeatherCommand(String city, int count) {
-        this.city = city;
+    public GetWeatherCommand(long id, int count) {
+        this.id = id;
         this.count = count;
     }
 
@@ -35,10 +37,10 @@ public class GetWeatherCommand extends HttpCommand {
     protected void createRequest() {
         Uri.Builder builder = Uri.parse(context.getString(R.string.url)).buildUpon();
         builder.appendEncodedPath(context.getString(R.string.url_weather_part));
-        builder.appendQueryParameter("q", city);
+        builder.appendQueryParameter("id", Long.toString(id));
         builder.appendQueryParameter("mode", "json");
         builder.appendQueryParameter("units", "metric");
-        builder.appendQueryParameter("count", Integer.toString(count));
+        builder.appendQueryParameter("cnt", Integer.toString(count));
 
         httpUriRequest = new HttpGet(builder.toString());
         addApiKeyHeader(httpUriRequest);
@@ -47,7 +49,6 @@ public class GetWeatherCommand extends HttpCommand {
     @Override
     protected void processRequest(HttpResponse response) {
         try {
-//            Log.d(Weather.TAG, EntityUtils.toString(response.getEntity()));
             JsonReader reader = new JsonReader(new InputStreamReader(response.getEntity().getContent()));
             LinkedList<ContentValues> forecast = new LinkedList<ContentValues>();
             new WeatherParser(forecast).parse(reader);
@@ -63,7 +64,7 @@ public class GetWeatherCommand extends HttpCommand {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(city);
+        dest.writeLong(id);
         dest.writeInt(count);
     }
 
@@ -77,7 +78,7 @@ public class GetWeatherCommand extends HttpCommand {
         @Override
         public GetWeatherCommand createFromParcel(Parcel source) {
             return new GetWeatherCommand(
-                    source.readString(),
+                    source.readLong(),
                     source.readInt()
             );
         }

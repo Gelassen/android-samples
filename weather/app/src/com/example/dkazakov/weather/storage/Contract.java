@@ -69,6 +69,7 @@ public class Contract {
         public final static String ID = _ID;
         final static String _SQL_ID_TYPE = _PK_AUTOINCREMENT;
         public final static String CITY = "CITY";
+        public final static String COUNTRY = "COUNTRY";
         public final static String LAT = "LAT";
         final static String _SQL_LAT_TYPE = _TYPE_INTEGER;
         public final static String LONG = "LONG";

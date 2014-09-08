@@ -5,6 +5,10 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,10 +16,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.ListView;
 
 import com.example.dkazakov.weather.R;
-import com.example.dkazakov.weather.network.commands.GetCityCommand;
 import com.example.dkazakov.weather.network.commands.GetWeatherCommand;
+import com.example.dkazakov.weather.network.commands.SetUpDefaultValuesCommand;
+import com.example.dkazakov.weather.storage.Contract;
+import com.example.dkazakov.weather.ui.dialogs.AddCityDialog;
 
 
 public class MainActivity extends Activity
@@ -29,7 +36,8 @@ public class MainActivity extends Activity
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
-    private CharSequence mTitle;
+    private CharSequence title;
+    private long cityId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,42 +46,35 @@ public class MainActivity extends Activity
 
         navigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+        title = getTitle();
 
         // Set up the drawer.
         navigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        new SetUpDefaultValuesCommand().start(this, null);
     }
 
     @Override
-    public void onNavigationDrawerItemSelected(int position) {
+    public void onNavigationDrawerItemSelected(int position, String city, long id) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .replace(R.id.container, WeatherListFragment.newInstance(city, id))
                 .commit();
     }
 
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_section1);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-        }
+    public void onSectionAttached(String city, long cityId) {
+        this.title = city;
+        this.cityId = cityId;
     }
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        actionBar.setTitle(title);
     }
 
 
@@ -92,66 +93,88 @@ public class MainActivity extends Activity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        final String defaultCity = "London";
         int id = item.getItemId();
         switch (id) {
             case R.id.action_update_weather:
-                final int defaultCount = 5;
-                new GetWeatherCommand(defaultCity, defaultCount).start(this, null);
+                // update weather
+                new GetWeatherCommand(cityId, GetWeatherCommand.DEFAULT_COUNT).start(this, null);
                 break;
 
             case R.id.action_add_city:
-                new GetCityCommand(defaultCity).start(this, null);
+                // show add fragment
+                AddCityDialog dialog = AddCityDialog.newInstance("");
+                dialog.show(getFragmentManager(), AddCityDialog.TAG);
                 break;
 
-            default:
-                throw new IllegalArgumentException(
-                        String.format("Did you missed define a logic for %s token?", id));
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
+    public static class WeatherListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+
+        private static final String ARG_CITY_NAME = "city";
+        private static final String ARG_CITY_ID = "city_id";
+
+        private WeatherAdapter adapter;
+
+
+        public static WeatherListFragment newInstance(String city, long cityId) {
+            WeatherListFragment fragment = new WeatherListFragment();
             Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            args.putString(ARG_CITY_NAME, city);
+            args.putLong(ARG_CITY_ID, cityId);
             fragment.setArguments(args);
             return fragment;
         }
 
-        public PlaceholderFragment() {
+        public WeatherListFragment() {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            adapter = new WeatherAdapter(getActivity(), R.layout.weather_item, null);
+            ListView list = (ListView) rootView.findViewById(android.R.id.list);
+            list.setAdapter(adapter);
+            // make an update for this city
+            Bundle args = getArguments();
+            new GetWeatherCommand(
+                    args.getLong(ARG_CITY_ID),
+                    GetWeatherCommand.DEFAULT_COUNT
+            ).start(getActivity(), null);
+            getLoaderManager().restartLoader(0, null, this);
             return rootView;
         }
 
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
+            Bundle args = getArguments();
             ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
+                    args.getString(ARG_CITY_NAME),
+                    args.getLong(ARG_CITY_ID)
+            );
+        }
+
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            final String selection = Contract.Weather.CITY_ID + "=?";
+            final String[] selectionArgs = new String[] { Long.toString(getArguments().getLong(ARG_CITY_ID)) };
+            return new CursorLoader(getActivity(), Contract.contentUri(Contract.Weather.class), null,
+                    selection, selectionArgs,
+                    Contract.Weather.DAY + " ASC");
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            adapter.swapCursor(data);
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+            adapter.swapCursor(null);
         }
     }
 
