@@ -1,5 +1,6 @@
 package com.example.dkazakov.weather.network.commands;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Parcel;
@@ -12,6 +13,7 @@ import com.example.dkazakov.weather.Weather;
 import com.example.dkazakov.weather.network.HttpCommand;
 import com.example.dkazakov.weather.network.parsers.WeatherParser;
 import com.example.dkazakov.weather.storage.Contract;
+import com.example.dkazakov.weather.widget.AppWidgetProvider;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -56,7 +58,11 @@ public class GetWeatherCommand extends HttpCommand {
             ContentValues[] forecastValues = new ContentValues[forecast.size()];
             forecast.toArray(forecastValues);
             Uri weatherUri = Contract.contentUri(Contract.Weather.class);
-            context.getContentResolver().bulkInsert(weatherUri, forecastValues);
+            ContentResolver cr = context.getContentResolver();
+            cr.delete(weatherUri, Contract.Weather.CITY_ID + "=?", new String[] { Long.toString(id) });
+            cr.bulkInsert(weatherUri, forecastValues);
+
+            AppWidgetProvider.updateWidgets(context);
         } catch (IOException e) {
             Log.d(Weather.TAG, "Failed to obtain weather data", e);
         }

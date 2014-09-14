@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:padding="?android:attr/listPreferredItemPaddingRight"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/weather_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold"
+            android:textColor="@android:color/holo_blue_dark"
+            android:text="Day"/>
+
+        <TextView
+            android:id="@+id/weather_desc"
+            android:layout_below="@id/weather_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/weather_item_temp_large"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Weather"/>
+
+        <TextView
+            android:id="@+id/weather_temp_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minEms="2"
+            android:padding="?android:attr/listPreferredItemPaddingRight"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_toLeftOf="@+id/weather_temp_max"
+            android:textStyle="bold"
+            android:text="20"/>
+
+        <TextView
+            android:id="@+id/weather_temp_max"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/weather_item_temp_small_margin"
+            android:minEms="1"
+            android:textAlignment="textEnd"
+            android:layout_alignParentRight="true"
+            android:textColor="@android:color/darker_gray"
+            android:text="25"/>
+
+        <TextView
+            android:id="@+id/weather_temp_min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minEms="1"
+            android:textAlignment="textEnd"
+            android:layout_marginTop="@dimen/weather_item_temp_small_margin"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/weather_temp_max"
+            android:textColor="@android:color/darker_gray"
+            android:text="15"/>
+
+    </RelativeLayout>
+    
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

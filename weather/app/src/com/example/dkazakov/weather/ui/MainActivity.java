@@ -6,7 +6,10 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.LoaderManager;
+import android.appwidget.AppWidgetManager;
+import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -23,10 +26,17 @@ import com.example.dkazakov.weather.network.commands.GetWeatherCommand;
 import com.example.dkazakov.weather.network.commands.SetUpDefaultValuesCommand;
 import com.example.dkazakov.weather.storage.Contract;
 import com.example.dkazakov.weather.ui.dialogs.AddCityDialog;
+import com.example.dkazakov.weather.ui.dialogs.CityChooserDialog;
+import com.example.dkazakov.weather.widget.AppWidgetProvider;
 
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, CityChooserDialog.ChooseCityListener {
+
+    public static void start(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
+    }
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -54,6 +64,23 @@ public class MainActivity extends Activity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         new SetUpDefaultValuesCommand().start(this, null);
+
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            handleWidgetCall(extras);
+        }
+        AppWidgetProvider.scheduleAlarms(this);
+    }
+
+    private void handleWidgetCall(Bundle extras) {
+        if (extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
+            final int appWidgetId = extras.getInt(
+                    AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    AppWidgetManager.INVALID_APPWIDGET_ID);
+            CityChooserDialog chooser = CityChooserDialog.newInstance(true, appWidgetId);
+            chooser.show(getFragmentManager(), CityChooserDialog.TAG);
+        }
     }
 
     @Override
@@ -110,6 +137,21 @@ public class MainActivity extends Activity
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onChooseCity(int widgetId) {
+        Intent resultValue = new Intent();
+        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+        setResult(RESULT_OK, resultValue);
+        finish();
+    }
+
+    @Override
+    public void onCancel() {
+        finish();
+    }
+
+
 
 
     public static class WeatherListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{

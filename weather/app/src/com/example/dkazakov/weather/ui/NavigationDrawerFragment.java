@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 
 import com.example.dkazakov.weather.R;
 import com.example.dkazakov.weather.storage.Contract;
+import com.example.dkazakov.weather.storage.PreferenceHelper;
 import com.example.dkazakov.weather.ui.dialogs.DeleteCityDialog;
 
 /**
@@ -39,13 +41,6 @@ import com.example.dkazakov.weather.ui.dialogs.DeleteCityDialog;
 public class NavigationDrawerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int CITIES_TOKEN = 0;
-
-    /**
-     * Remember the position of the selected item.
-     */
-    private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
-    private static final String STATE_SELECTED_ID = "selected_city_id";
-    private static final String STATE_SELECTED_CITY = "selected_city";
 
     /**
      * Per the design guidelines, you should show the drawer on launch until the user manually
@@ -71,7 +66,6 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager.
     private int currentSelectedPosition = 0;
     private long cityId = 0;
     private String city = "";
-    private boolean fromSavedInstanceState;
     private boolean userLearnedDrawer;
 
     public NavigationDrawerFragment() {
@@ -86,12 +80,11 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         userLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
-        if (savedInstanceState != null) {
-            currentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-            cityId = savedInstanceState.getLong(STATE_SELECTED_ID);
-            city = savedInstanceState.getString(STATE_SELECTED_CITY);
-            fromSavedInstanceState = true;
-        }
+
+        Context context = getActivity();
+        city = PreferenceHelper.getSelectedCity(context);
+        cityId = PreferenceHelper.getSelectedCityId(context);
+        currentSelectedPosition = PreferenceHelper.getSelectedItem(context);
 
         // Select either the default item (0) or the last selected item.
         selectItem(currentSelectedPosition, city, cityId);
@@ -200,7 +193,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager.
 
         // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
         // per the navigation drawer design guidelines.
-        if (!userLearnedDrawer && !fromSavedInstanceState) {
+        if (!userLearnedDrawer) {
             this.drawerLayout.openDrawer(fragmentContainerView);
         }
 
@@ -247,11 +240,12 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager.
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(STATE_SELECTED_POSITION, currentSelectedPosition);
-        outState.putLong(STATE_SELECTED_ID, cityId);
-        outState.putString(STATE_SELECTED_CITY, city);
+    public void onDestroy() {
+        super.onDestroy();
+        Context context = getActivity();
+        PreferenceHelper.setSelectedCity(context, city);
+        PreferenceHelper.setSelectedCityId(context, cityId);
+        PreferenceHelper.setSelectedItem(context, currentSelectedPosition);
     }
 
     @Override

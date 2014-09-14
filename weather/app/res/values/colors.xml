@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="weather_item_temp_large">#7e7e7e</color>
+    <color name="widget_background">#FFFFFF</color>
+    <color name="widget_stroke">#90FFFFFF</color>
+</resources>
