@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:viewportHeight="@integer/btn_floating_viewport_size"
+    android:viewportWidth="@integer/btn_floating_viewport_size"
+    android:width="@dimen/btn_floating_size"
+    android:height="@dimen/btn_floating_size">
+
+    <group
+        android:name="btn_float_group"
+        android:pivotX="@integer/btn_floating_pivot"
+        android:pivotY="@integer/btn_floating_pivot">
+
+        <path
+            android:name="btn_float"
+            android:strokeColor="@android:color/white"
+            android:strokeWidth="3"
+            android:pathData="M12,0L12,24M0,12,L24,12" />
+
+    </group>
+
+</vector>
