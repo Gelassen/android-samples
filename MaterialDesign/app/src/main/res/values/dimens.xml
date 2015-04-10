@@ -5,4 +5,7 @@
 
 
     <dimen name="btn_floating_size">24dp</dimen>
+    <dimen name="fab_elevation">5dp</dimen>
+    <dimen name="fab_rise">3dp</dimen>
+    <integer name="fab_duration">100</integer>
 </resources>
