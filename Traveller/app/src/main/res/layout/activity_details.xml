@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <FrameLayout
+        android:id="@+id/details_image_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/details_image_height">
+
+        <ImageView
+            android:id="@+id/details_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@mipmap/ic_launcher"
+            />
+
+        <ImageView
+            android:id="@+id/details_fav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:src="@drawable/selector_favourite"
+            />
+
+    </FrameLayout>
+
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_save"
+        android:layout_width="@dimen/fab_width"
+        android:layout_height="@dimen/fab_height"
+        android:layout_marginTop="@dimen/fab_margin_top"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:layout_marginRight="@dimen/fab_margin_right"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/details_image_container"
+        app:elevation="6dp"
+        android:onClick="onFabClick"
+        />
+
+    <TextView
+        android:id="@+id/details_description_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_text_height"
+        android:layout_below="@+id/details_image_container"
+        android:layout_marginTop="@dimen/default_space_margin"
+        android:layout_marginLeft="@dimen/default_horizontal_margin"
+        android:gravity="center_vertical"
+        android:text="Description"
+        />
+
+    <EditText
+        android:id="@+id/details_description_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/default_horizontal_margin"
+        android:layout_below="@+id/details_description_title"
+        />
+
+
+
+</RelativeLayout>

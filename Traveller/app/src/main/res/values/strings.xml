@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Traveller</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Favorites</string>
+    <string name="action_photo">Photo</string>
+</resources>
