@@ -14,20 +14,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.home.traveller.R;
+import com.home.traveller.domain.CameraImageSource;
+import com.home.traveller.domain.GalleryImageSource;
+import com.home.traveller.domain.ImageSource;
+import com.home.traveller.domain.StorageImageSource;
 import com.home.traveller.model.Card;
 import com.home.traveller.storage.Contract;
 
 /**
  * Created by dmitry.kazakov on 10/3/2015.
  */
-public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DetailsActivity extends AppCompatActivity {
 
     private static final String EXTRA_DETAILS = "EXTRA_DETAILS";
 
     private static final int DATA_DETAILS = 0;
     private static final int DATA_GALLERY = 1;
+    private static final int DATA_CAMERA = 2;
 
-    public static void startActivity(Context context, Intent data, boolean details) {
+    public enum ImageSourceConst {
+        DETAILS, CAMERA, CALLERY
+    }
+
+    public static void startActivity(Context context, Intent data, ImageSourceConst details) {
         Intent intent = data == null ? new Intent() : new Intent(data);
         intent.setComponent(new ComponentName(context, DetailsActivity.class));
         intent.putExtra(EXTRA_DETAILS, details);
@@ -35,13 +44,18 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     }
 
     private DetailsViewBinder detailsViewBinder;
+    private CardController cardController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        detailsViewBinder = new DetailsViewBinder(findViewById(R.id.container));
+        cardController = new CardController();
+        detailsViewBinder = new DetailsViewBinder(
+                findViewById(R.id.container),
+                cardController
+        );
 
         Launcher launcher = new Launcher();
         launcher.process(getIntent());
@@ -53,70 +67,33 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         finish();
     }
 
+    private class Launcher implements ImageSource.Listener {
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case DATA_DETAILS:
-                Uri uri = Contract.contentUri(Contract.CardsTable.class);
-                String selection = Contract.CardsTable.IMAGE_PATH + "=?";
-                String[] selectionArgs = new String[] { getIntent().getData().toString() };
-                return new CursorLoader(this, uri, null, selection, selectionArgs, null);
-            case DATA_GALLERY:
-                uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                String sortOrder = MediaStore.Images.Media.DATE_ADDED + " DESC";
-                return new CursorLoader(this, uri, null, null, null, sortOrder);
-            default:
-                throw new IllegalArgumentException("Unsupported cursor type");
-        }
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // no op
-        switch (loader.getId()) {
-            case DATA_GALLERY:
-                data.moveToFirst();
-                final String path = "file://" + data.getString(data.getColumnIndex(MediaStore.Images.Media.DATA));
-                detailsViewBinder.updatePath(path);
-                detailsViewBinder.loadImage(Uri.parse(path));
-                break;
-            case DATA_DETAILS:
-                if (data.getCount() != 0) {
-                    data.moveToFirst();
-                    Card card = Card.fromCursorAsItem(data);
-                    detailsViewBinder.updateUI(card);
-                }
-                break;
-        }
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        // no op
-    }
-
-    private class Launcher {
+        private ImageSource source;
 
         public void process(Intent intent) {
+            // prepare url
             Uri data = intent.getData();
-            if (data != null) {
-                processDetails(data);
+            Card card = new Card();
+            card.setPath(data == null ? "" : data.toString());
+            // define source
+            ImageSourceConst imageSource = ImageSourceConst.valueOf(intent.getStringExtra(EXTRA_DETAILS));
+            if (imageSource.equals(ImageSourceConst.DETAILS)) {
+                source = new StorageImageSource(DetailsActivity.this, this, card);
+            } else if (imageSource.equals(ImageSourceConst.CALLERY)) {
+                source = new GalleryImageSource(DetailsActivity.this, this, card);
+            } else if (imageSource.equals(ImageSourceConst.CAMERA)) {
+                source = new CameraImageSource(DetailsActivity.this, this);
             } else {
-                processFromGallery();
+                throw new IllegalArgumentException("Unsupported image source type");
             }
+
+            source.perform();
         }
 
-        private void processFromGallery() {
-            getSupportLoaderManager().initLoader(DATA_GALLERY, Bundle.EMPTY, DetailsActivity.this);
-        }
-
-        private void processDetails(Uri data) {
-            detailsViewBinder.updatePath(data.toString());
-            detailsViewBinder.loadImage(data);
-            // TODO go to storage and take the others dat by uri
-            getSupportLoaderManager().initLoader(DATA_DETAILS, Bundle.EMPTY, DetailsActivity.this);
+        @Override
+        public void onUrlPrepared(Card card) {
+            detailsViewBinder.updateUI(card);
         }
     }
 }

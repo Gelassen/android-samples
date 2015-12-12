@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final int GET_IMAGE = 0;
     private CardsAdapter adapter;
 
+    private DetailsActivity.ImageSourceConst imageSourceConst;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             builder.setItems(optionsAsStrings, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    // TODO write a consts to imageSourceConst
                     DialogOption option = options.get(which);
                     Intent intent = option.getIntent();
                     startActivityForResult(intent, GET_IMAGE);
@@ -96,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 //        if (resultCode == RESULT_CANCELED) return;
-        DetailsActivity.startActivity(this, data, false);
+        DetailsActivity.startActivity(this, data, DetailsActivity.ImageSourceConst.CAMERA);
     }
 
     @Override

@@ -153,9 +153,15 @@ public class AppContentProvider extends ContentProvider {
     }
 
     private final static int MATCH_CARDS = 0x00000001;
+    private final static int MATCH_ASSOCAITES = 0x00000002;
+    private final static int MATCH_TAGS = 0x00000003;
+    private final static int MATCH_SAMPLE_VIEW = 0x00000004;
 
     static {
         match(Contract.CardsTable.class, MATCH_CARDS);
+        match(Contract.AssociationSample.class, MATCH_ASSOCAITES);
+        match(Contract.TagSample.class, MATCH_TAGS);
+        match(Contract.SampleView.class, MATCH_SAMPLE_VIEW);
     }
 
 }

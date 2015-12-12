@@ -85,4 +85,31 @@ public class Contract {
         public final static String _SQL_UNIQUE = IMAGE_PATH;
     }
 
+    public final static class AssociationSample extends Table {
+        public final static String ID = _ID;
+        final static String _SQL_ID_TYPE = _PK_AUTOINCREMENT;
+        public final static String ASSOCIATION = "ASSOCIATION"; // link on comment
+    }
+
+    public final static class TagSample extends Table {
+        public final static String ID = _ID;
+        final static String _SQL_ID_TYPE = _PK_AUTOINCREMENT;
+        public final static String TAG = "TAG"; // link on association
+        public final static String TEST = "TEST";
+    }
+
+    public final static class SampleView extends View {
+        final static String _SQL_VIEW_QUERY = " SELECT * "
+                + " FROM " + getTableName(CardsTable.class)
+                + " left outer join " + getTableName(AssociationSample.class)
+                + " on " + getTableName(AssociationSample.class) + "." + AssociationSample.ASSOCIATION
+                + " = " + getTableName(CardsTable.class) + "." + CardsTable.COMMENT
+                + " left outer join " + getTableName(TagSample.class)
+                + " on " + getTableName(TagSample.class) + "." + TagSample.TAG
+                + " = " + getTableName(AssociationSample.class) + "." + AssociationSample.ASSOCIATION
+                ;
+
+
+    }
+
 }

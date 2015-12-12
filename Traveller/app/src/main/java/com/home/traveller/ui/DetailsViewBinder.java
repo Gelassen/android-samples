@@ -21,13 +21,13 @@ public class DetailsViewBinder {
 
     private CardController cardController;
 
-    public DetailsViewBinder(View view) {
+    public DetailsViewBinder(View view, CardController cardController) {
         imageView = (ImageView) view.findViewById(R.id.details_image);
         favView = (ImageView) view.findViewById(R.id.details_fav);
         description = (EditText) view.findViewById(R.id.details_description_text);
         favView.setOnClickListener(favListener);
 
-        cardController = new CardController();
+        this.cardController = cardController;
     }
 
     public void updateUI(Card card) {

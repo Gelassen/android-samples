@@ -38,6 +38,6 @@ public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
     public void onClick(View v) {
         Intent intent = new Intent();
         intent.setData(Uri.parse(path));
-        DetailsActivity.startActivity(v.getContext(), intent, true);
+        DetailsActivity.startActivity(v.getContext(), intent, DetailsActivity.ImageSourceConst.DETAILS);
     }
 }
