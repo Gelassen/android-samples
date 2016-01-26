@@ -3,6 +3,10 @@ package com.home.traveller;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -16,16 +20,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.home.traveller.domain.ImageSource;
 import com.home.traveller.model.Card;
 import com.home.traveller.model.DialogOption;
 import com.home.traveller.storage.Contract;
+import com.home.traveller.ui.CardController;
 import com.home.traveller.ui.CardsAdapter;
 import com.home.traveller.ui.DetailsActivity;
+import com.home.traveller.utils.FileManager;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, ImageSource.Listener{
 
     private static final int GET_IMAGE = 0;
     private CardsAdapter adapter;
@@ -98,8 +108,38 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == RESULT_CANCELED) return;
-        DetailsActivity.startActivity(this, data, DetailsActivity.ImageSourceConst.CAMERA);
+        if (resultCode == RESULT_CANCELED) return;
+
+        boolean fromGallery = data != null;
+        if (fromGallery) {
+//            final File directory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//            FileManager fileManager = new FileManager(this);
+//            File file = fileManager.copyFile(
+//                    getFileDescriptor(data),
+//                    fileManager.addHiddenFolderToPath(directory)
+//            );
+//
+//            Log.d(App.TAG, "File card: " + file.exists());
+            Card card = new Card();
+            card.setFileDescriptor(getFileDescriptor(data));
+            CardController cardController = new CardController();
+            cardController.setCard(card);
+            cardController.createNew(this, this);
+        } else {
+            DetailsActivity.ImageSourceConst source = data != null ? DetailsActivity.ImageSourceConst.CALLERY : DetailsActivity.ImageSourceConst.CAMERA;
+            DetailsActivity.startActivity(this, data, source);
+        }
+    }
+
+    private FileDescriptor getFileDescriptor(Intent data) {
+        ParcelFileDescriptor descriptor = null;
+        Uri path = data.getData();
+        try {
+            descriptor = getContentResolver().openFileDescriptor(path, "r");
+        } catch (FileNotFoundException e) {
+            Log.e(App.TAG, "File not found for " + path, e);
+        }
+        return descriptor.getFileDescriptor();
     }
 
     @Override
@@ -116,5 +156,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.update(null);
+    }
+
+    @Override
+    public void onUrlPrepared(Card card) {
+        DetailsActivity.startActivity(this, Uri.parse(card.getPath()), DetailsActivity.ImageSourceConst.CALLERY);
     }
 }

@@ -2,9 +2,11 @@ package com.home.traveller.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.text.TextUtils;
 
 import com.home.traveller.storage.Contract;
 
+import java.io.FileDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import java.util.List;
  * Created by dmitry.kazakov on 10/2/2015.
  */
 public class Card {
+    private FileDescriptor fileDescriptor;
     private String path;
     private String tag = "";
     private String desc = "";
@@ -38,6 +41,18 @@ public class Card {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public FileDescriptor getFileDescriptor() {
+        return fileDescriptor;
+    }
+
+    public void setFileDescriptor(FileDescriptor fileDescriptor) {
+        this.fileDescriptor = fileDescriptor;
+    }
+
+    public boolean directPathAvailable() {
+        return !TextUtils.isEmpty(path);
     }
 
     public ContentValues asContentValues() {
