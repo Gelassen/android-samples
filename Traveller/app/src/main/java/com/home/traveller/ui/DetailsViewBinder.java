@@ -11,6 +11,8 @@ import com.bumptech.glide.Glide;
 import com.home.traveller.R;
 import com.home.traveller.model.Card;
 
+import java.io.File;
+
 /**
  * Created by dmitry.kazakov on 10/4/2015.
  */
@@ -43,13 +45,17 @@ public class DetailsViewBinder {
     }
 
     public void loadImage(Uri uri) {
+        Uri.Builder builder = uri.buildUpon();
+//        builder.scheme("file://");
         Glide.with(imageView.getContext())
-                .load(uri)
+                .load(new File(uri.getPath()))
                 .centerCrop()
+                .error(android.R.drawable.btn_star)
                 .into(imageView);
     }
 
     public void updateModel() {
+        cardController.updateImagePath();
         cardController.updateComment(description.getText().toString());
         cardController.updateModel(imageView.getContext());
     }

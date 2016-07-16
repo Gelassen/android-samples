@@ -26,7 +26,8 @@ public class GalleryImageSource implements ImageSource {
         // make the copy of image
         CardController cardController = new CardController();
         cardController.updateImagePath(card.getPath());
-        cardController.createNew(context, listener);
+//        cardController.createNew(context, listener);
+        if (listener != null) listener.onUrlPrepared(card);
     }
 
 }

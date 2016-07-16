@@ -10,6 +10,9 @@ import com.home.traveller.App;
 import com.home.traveller.model.Card;
 
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,19 +41,33 @@ public class FileManager {
         return ".".concat(tokens[tokens.length-1]);
     }
 
+    public File copyFile(FileDescriptor fileDescriptor, File directory) {
+        InputStream in = new FileInputStream(fileDescriptor);
+        return copyFile(in, directory, String.valueOf(System.currentTimeMillis()), ".png"); // FIXME remove hardcoded suffix to support type in runtime
+    }
+
     public File copyFile(String uri, File directory) {
-        File tempFile = null;
+        final String str = "file://" + uri;
+        Uri.Builder builder = Uri.parse(str).buildUpon();
+        builder.scheme("file");
+        Log.d(App.TAG, "Path to file: " + builder.toString());
         InputStream in = null;
+        try {
+            in = cr.openInputStream(builder.build());
+        } catch (FileNotFoundException e) {
+            Log.e(App.TAG, "Failed to found file for " + uri, e);
+        }
+        return copyFile(in, directory, FileManager.extractNameFromPath(uri), FileManager.extractPrefixFromPath(uri));
+    }
+
+    private File copyFile(InputStream in, File directory, String prefix, String suffix) {
+        File tempFile = null;
         FileOutputStream out = null;
         try {
-            final String str = "file://" + uri;
-            Uri.Builder builder = Uri.parse(str).buildUpon();
-            builder.scheme("file");
-            Log.d(App.TAG, "Path to file: " + builder.toString());
-            in = cr.openInputStream(builder.build());
+
             tempFile = File.createTempFile(
-                    EXTRA_PREFIX.concat(FileManager.extractNameFromPath(uri)),
-                    FileManager.extractPrefixFromPath(uri),
+                    EXTRA_PREFIX.concat(prefix),
+                    suffix,
                     directory
             );
             out = new FileOutputStream(tempFile, false);

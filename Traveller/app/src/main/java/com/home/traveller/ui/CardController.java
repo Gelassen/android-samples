@@ -56,7 +56,20 @@ public class CardController {
                 if (directory != null
                         && fileManager.isExternalStorageWritable()
                         && fileManager.isEnoughMemory(card)) {
-                    File file = fileManager.copyFile(card.getPath(), fileManager.addHiddenFolderToPath(directory));
+
+                    File file;
+                    if (card.directPathAvailable()) {
+                        file = fileManager.copyFile(
+                                card.getPath(),
+                                fileManager.addHiddenFolderToPath(directory)
+                        );
+                    } else {
+                        file = fileManager.copyFile(
+                                card.getFileDescriptor(),
+                                fileManager.addHiddenFolderToPath(directory)
+                        );
+                    }
+
                     // update runtime model but not save it persistent model
                     Log.d(App.TAG, "Absolute path: " + file.getAbsolutePath());
                     card.setPath(file.getAbsolutePath());
