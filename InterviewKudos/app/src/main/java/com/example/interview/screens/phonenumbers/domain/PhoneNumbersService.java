@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.example.interview.AppResultReceiver;
 import com.example.interview.R;
 import com.example.interview.model.TelNumber;
 import com.example.interview.network.api.GetNumbersCommand;
@@ -28,9 +29,11 @@ public class PhoneNumbersService {
         context.startActivity(Intent.createChooser(intent, ""));
     }
 
-    public void onFirstRun(Context context) {
-//        if (!Storage.isFirstRun(context)) return;
+    public boolean onFirstRun(Context context, AppResultReceiver appResultReceiver) {
+//        if (!Storage.isFirstRun(context)) return false;
 
-        new GetNumbersCommand().start(context, null);
+        new GetNumbersCommand().start(context, appResultReceiver);
+
+        return true;
     }
 }

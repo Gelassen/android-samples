@@ -2,25 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/row_phone_number_padding"
+    android:clickable="true"
     >
 
     <TextView
         android:id="@+id/phone_item_number"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/textAppearanceMedium"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/activity_horizontal_margin"
         />
 
     <TextView
         android:id="@+id/phone_item_price"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/textAppearanceMedium"
+        android:layout_height="wrap_content"
         />
 
     <TextView
         android:id="@+id/phone_item_owner"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/textAppearanceMedium"
+        android:layout_height="wrap_content"
         />
 
 </LinearLayout>

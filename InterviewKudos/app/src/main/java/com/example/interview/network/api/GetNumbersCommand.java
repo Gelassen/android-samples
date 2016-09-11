@@ -12,11 +12,13 @@ import com.example.interview.converters.network.JsonToTelNumberConverter;
 import com.example.interview.converters.storage.TelNumbersToContentValuesConverter;
 import com.example.interview.model.TelNumber;
 import com.example.interview.network.HttpCommand;
+import com.example.interview.network.Status;
 import com.example.interview.storage.Contract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.List;
 
 import okhttp3.Request;
@@ -47,10 +49,15 @@ public class GetNumbersCommand extends HttpCommand {
     protected void onProcessResponse(Response response) {
         Log.d(App.TAG, "onProcessResponse for GetNumbersCommand");
         try {
+            // simply drop clean table for now, in future add unique constraint with auto update mode
+            ContentResolver cr = context.getContentResolver();
+            cr.delete(Contract.contentUri(Contract.TelNumbers.class), null, null);
+
             // TODO please note
             // for current amount of data it is safe to use in-memory parser, however
             // with growth of response client should use pull parser. Use current solution to speed up development
-            JSONArray json = new JSONArray(response.toString());
+            String jsonStr = response.body().string();
+            JSONArray json = new JSONArray(jsonStr);
 
             JsonToTelNumberConverter jsonToTelNumberConverter = new JsonToTelNumberConverter();
             List<TelNumber> result = jsonToTelNumberConverter.convert(json);
@@ -63,11 +70,14 @@ public class GetNumbersCommand extends HttpCommand {
             resultValues.toArray(toStorage);
 
             Log.d(App.TAG, "onProcessResponse for GetNumbersCommand: save data - " + toStorage.length);
-            ContentResolver cr = context.getContentResolver();
             cr.bulkInsert(Contract.contentUri(Contract.TelNumbers.class), toStorage);
 
         } catch (JSONException e) {
             Log.e(App.TAG, "Failed to obtain json", e);
+            onProcessError(Status.FAILED_TO_EXECUTE_REQUEST);
+        } catch (IOException e) {
+            Log.e(App.TAG, "Faield oto obtain response", e);
+            onProcessError(Status.FAILED_TO_EXECUTE_REQUEST);
         }
 
     }

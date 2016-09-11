@@ -14,7 +14,7 @@ import java.util.List;
  *
  * Created by John on 9/11/2016.
  */
-public class CursorToTelNumbersConverter implements IConverter<Cursor, List<TelNumber>> {
+public class CursorToTelNumberConverter implements IConverter<Cursor, TelNumber> {
 
     private static final int NOT_INIT = -1;
 
@@ -22,23 +22,19 @@ public class CursorToTelNumbersConverter implements IConverter<Cursor, List<TelN
     private int ownerIdx = NOT_INIT;
     private int priceIdx = NOT_INIT;
 
-    private CursorToTelNumberConverter converter;
-
-    public CursorToTelNumbersConverter() {
-        converter = new CursorToTelNumberConverter();
+    @Override
+    public TelNumber convert(Cursor cursor) {
+        if (cursor == null || cursor.getCount() == 0) return new TelNumber();
+        init(cursor);
+        return getTelNumber(cursor);
     }
 
-    @Override
-    public List<TelNumber> convert(Cursor cursor) {
-        if (cursor == null || cursor.getCount() == 0) return new ArrayList<>();
-
-        List<TelNumber> result = new ArrayList<>();
-        init(cursor);
-        while (cursor.moveToNext()) {
-            TelNumber telNumber = converter.convert(cursor);
-            result.add(telNumber);
-        }
-        return result;
+    private TelNumber getTelNumber(Cursor cursor) {
+        TelNumber telNumber = new TelNumber();
+        telNumber.setPhoneNumber(cursor.getString(phoneIdx));
+        telNumber.setPhoneNumberOwner(cursor.getString(ownerIdx));
+        telNumber.setPhoneNumberPrice(cursor.getString(priceIdx));
+        return telNumber;
     }
 
     private void init(Cursor cursor) {

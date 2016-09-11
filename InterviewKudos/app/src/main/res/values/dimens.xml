@@ -6,4 +6,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- phone numbers -->
+    <dimen name="row_phone_number_padding">16dp</dimen>
+    <dimen name="row_phone_number_padding_top">2dp</dimen>
 </resources>

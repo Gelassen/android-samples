@@ -7,8 +7,10 @@ import android.os.ResultReceiver;
 import android.util.Log;
 
 import com.example.interview.App;
+import com.example.interview.R;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -32,6 +34,11 @@ public abstract class HttpCommand extends Command {
         Log.d(App.TAG, String.format("%s is started", getClass().getSimpleName()));
         final long stime = System.currentTimeMillis();
         OkHttpClient client = new OkHttpClient();
+        client = client.newBuilder()
+                .connectTimeout(context.getResources().getInteger(R.integer.api_timeout), TimeUnit.SECONDS)
+                .writeTimeout(context.getResources().getInteger(R.integer.api_timeout), TimeUnit.SECONDS)
+                .readTimeout(context.getResources().getInteger(R.integer.api_timeout), TimeUnit.SECONDS)
+                .build();
 
         onPreExecute(context);
 

@@ -9,4 +9,8 @@
     <!-- Phone numbers -->
     <string name="phone_number_email_title">Greetings!</string>
     <string name="phone_number_email_subj">Dear, I am writing to you &#8230;</string>
+
+    <!-- Notifications -->
+    <string name="notifications_error_network">Something goes wrong. Try to launch some time later</string>
+    <string name="notifications_error">Do you have internet connection?</string>
 </resources>

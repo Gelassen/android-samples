@@ -22,7 +22,10 @@
             <!--</intent-filter>-->
         <!--</activity>-->
 
-        <activity android:name=".screens.phonenumbers.PhoneNumbersActivity">
+        <activity
+            android:name=".screens.phonenumbers.PhoneNumbersActivity"
+            android:screenOrientation="sensorPortrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
