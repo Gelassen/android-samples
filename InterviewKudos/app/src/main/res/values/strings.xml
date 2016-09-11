@@ -4,13 +4,22 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_sort">Sort by price</string>
 
     <!-- Phone numbers -->
     <string name="phone_number_email_title">Greetings!</string>
     <string name="phone_number_email_subj">Dear, I am writing to you &#8230;</string>
 
+    <!-- Add new phone -->
+    <string name="prompt_phone_number">Phone number</string>
+    <string name="prompt_phone_price">Phone price</string>
+    <string name="prompt_phone_owner">Phone owner</string>
+    <string name="add_new_phone">Add new phone</string>
+
     <!-- Notifications -->
     <string name="notifications_error_network">Something goes wrong. Try to launch some time later</string>
     <string name="notifications_error">Do you have internet connection?</string>
+    <string name="action_search">Search</string>
+    <string name="action_add_new_phone">Add</string>
+
 </resources>

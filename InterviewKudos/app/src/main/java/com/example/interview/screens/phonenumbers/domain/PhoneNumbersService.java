@@ -8,6 +8,7 @@ import com.example.interview.AppResultReceiver;
 import com.example.interview.R;
 import com.example.interview.model.TelNumber;
 import com.example.interview.network.api.GetNumbersCommand;
+import com.example.interview.storage.Storage;
 
 /**
  * The intent of this class is encapsulate biz logic for tel numbers screen. In
@@ -30,10 +31,10 @@ public class PhoneNumbersService {
     }
 
     public boolean onFirstRun(Context context, AppResultReceiver appResultReceiver) {
-//        if (!Storage.isFirstRun(context)) return false;
+        if (!Storage.isFirstRun(context)) return false;
 
         new GetNumbersCommand().start(context, appResultReceiver);
-
+        Storage.setFirstRun(context);
         return true;
     }
 }

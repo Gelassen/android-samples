@@ -14,11 +14,11 @@ public class Storage {
 
     public static boolean isFirstRun(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getBoolean(EXTA_FIRST_RUN, false);
+        return preferences.getBoolean(EXTA_FIRST_RUN, true);
     }
 
     public static void setFirstRun(Context context) {
         SharedPreferences preferenes = PreferenceManager.getDefaultSharedPreferences(context);
-        preferenes.edit().putBoolean(EXTA_FIRST_RUN, true).apply();
+        preferenes.edit().putBoolean(EXTA_FIRST_RUN, false).apply();
     }
 }
