@@ -5,4 +5,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-- Phone numbers -->
+    <string name="phone_number_email_title">Greetings!</string>
+    <string name="phone_number_email_subj">Dear, I am writing to you &#8230;</string>
 </resources>

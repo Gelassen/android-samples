@@ -34,7 +34,7 @@ public class LibContentProvider extends ContentProvider {
         builder.setTables(table);
         String groupBy = null;
         switch (matchId) {
-            case MATCH_SAMPLE:
+            case MATCH_TEL_NUMBERS:
                 // do what you want
                 break;
             default:
@@ -110,10 +110,10 @@ public class LibContentProvider extends ContentProvider {
         tables.put(code, tableName);
     }
 
-    private final static int MATCH_SAMPLE = 0x00000001;
+    private final static int MATCH_TEL_NUMBERS = 0x00000001;
 
     static {
-        match(Contract.SampleTable.class, MATCH_SAMPLE);
+        match(Contract.TelNumbers.class, MATCH_TEL_NUMBERS);
     }
 
 }

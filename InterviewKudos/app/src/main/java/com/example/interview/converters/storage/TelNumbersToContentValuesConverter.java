@@ -33,9 +33,9 @@ public class TelNumbersToContentValuesConverter implements IConverter<List<TelNu
 
     private ContentValues convert(TelNumber telNumber) {
         ContentValues contentValues = new ContentValues(3);
-        contentValues.put(Contract.SampleTable.PHONE_NUMBER, telNumber.getPhoneNumber());
-        contentValues.put(Contract.SampleTable.PHONE_NUMBER_PRICE, telNumber.getPhoneNumberPrice());
-        contentValues.put(Contract.SampleTable.PHONE_NUMBER_OWNER, telNumber.getPhoneNumberOwner());
+        contentValues.put(Contract.TelNumbers.PHONE_NUMBER, telNumber.getPhoneNumber());
+        contentValues.put(Contract.TelNumbers.PHONE_NUMBER_PRICE, telNumber.getPhoneNumberPrice());
+        contentValues.put(Contract.TelNumbers.PHONE_NUMBER_OWNER, telNumber.getPhoneNumberOwner());
         return contentValues;
     }
 }

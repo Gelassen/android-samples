@@ -17,7 +17,6 @@ import com.example.interview.storage.Contract;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.Request;
@@ -30,6 +29,9 @@ import okhttp3.Response;
  * Created by John on 9/11/2016.
  */
 public class GetNumbersCommand extends HttpCommand {
+
+    public GetNumbersCommand() {
+    }
 
     protected GetNumbersCommand(Parcel in) {
         // no op
@@ -62,7 +64,7 @@ public class GetNumbersCommand extends HttpCommand {
 
             Log.d(App.TAG, "onProcessResponse for GetNumbersCommand: save data - " + toStorage.length);
             ContentResolver cr = context.getContentResolver();
-            cr.bulkInsert(Contract.contentUri(Contract.SampleTable.class), toStorage);
+            cr.bulkInsert(Contract.contentUri(Contract.TelNumbers.class), toStorage);
 
         } catch (JSONException e) {
             Log.e(App.TAG, "Failed to obtain json", e);

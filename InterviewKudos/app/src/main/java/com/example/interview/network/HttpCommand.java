@@ -45,7 +45,7 @@ public abstract class HttpCommand extends Command {
                     onProcessError(response.code());
                 }
             } catch (IOException e) {
-                Log.d(App.TAG, "Failed to execute request");
+                Log.e(App.TAG, "Failed to execute request", e);
                 onProcessError(Status.FAILED_TO_EXECUTE_REQUEST);
             }
         } else {

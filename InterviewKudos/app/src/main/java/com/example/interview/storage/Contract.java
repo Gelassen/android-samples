@@ -57,7 +57,7 @@ public class Contract {
     }
 
 
-    public final static class SampleTable extends Table {
+    public final static class TelNumbers extends Table {
         public final static String ID = _ID;
         final static String _SQL_ID_TYPE = _PK_AUTOINCREMENT;
         public final static String PHONE_NUMBER = "PHONE_NUMBER";

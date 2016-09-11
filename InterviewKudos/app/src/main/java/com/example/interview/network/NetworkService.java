@@ -46,25 +46,14 @@ public class NetworkService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, NAMESPACE);
-        wakeLock.acquire();
     }
 
     @Override
     public void onDestroy() {
         pool.shutdown();
-        wakeLock.release();
         super.onDestroy();
 
         Log.d(App.TAG, "Network service is destroyed");
-    }
-
-    @Override
-    @Deprecated
-    public void onStart(Intent intent, int startId) {
-        super.onStart(intent, startId);
-        processIntent(intent, startId);
     }
 
     @Override

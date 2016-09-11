@@ -87,9 +87,13 @@ public class LibOpenHelper extends SQLiteOpenHelper {
     private String getTableDDL(final Class<Contract.Table> table) {
         final StringBuilder sql = new StringBuilder(128);
         sql.append("create table ").append(Contract.getTableName(table)).append(" (");
+        Field[] fields = table.getFields();
         for (final Field field : table.getFields()) {
+
             if (field.getName().startsWith("_")) continue;
             try {
+                Object object = field.get(null);
+                if (object == null) continue; // skip null entries
                 sql.append(field.get(null));
             } catch (Exception ignore) {
             }
