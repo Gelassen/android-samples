@@ -7,7 +7,6 @@ import android.os.ResultReceiver;
 import android.util.Log;
 
 import com.example.interview.App;
-import com.example.interview.Params;
 
 import java.io.IOException;
 
@@ -34,25 +33,23 @@ public abstract class HttpCommand extends Command {
         final long stime = System.currentTimeMillis();
         OkHttpClient client = new OkHttpClient();
 
-//        Request request = new Request.Builder()
-//                .url(url)
-//                .build();
+        onPreExecute(context);
 
         Response response = null;
         if (isNetworkAvailable()) {
             try {
                 response = client.newCall(request).execute();
                 if (response.isSuccessful()) {
-                    processResponse(response);
+                    onProcessResponse(response);
                 } else {
-                    processError(response.code());
+                    onProcessError(response.code());
                 }
             } catch (IOException e) {
                 Log.d(App.TAG, "Failed to execute request");
-                processError(Status.FAILED_TO_EXECUTE_REQUEST);
+                onProcessError(Status.FAILED_TO_EXECUTE_REQUEST);
             }
         } else {
-            processError(Status.FAILED_NETWORK);
+            onProcessError(Status.FAILED_NETWORK);
         }
 
         Log.d(App.TAG, String.format("%s is ended, %s",
@@ -61,11 +58,13 @@ public abstract class HttpCommand extends Command {
         notifyListeners(status);
     }
 
-    protected void processError(final int statusCode) {
+    protected abstract void onPreExecute(Context context);
+
+    protected void onProcessError(final int statusCode) {
         status.add(statusCode);
     };
 
-    protected abstract void processResponse(Response response);
+    protected abstract void onProcessResponse(Response response);
 
     private boolean isNetworkAvailable() {
         NetworkInfo networkInfo = ((ConnectivityManager) context
