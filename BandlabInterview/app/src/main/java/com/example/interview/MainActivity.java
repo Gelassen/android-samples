@@ -1,9 +1,11 @@
 package com.example.interview;
 
+import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.interview.network.commands.GetInitialVideoPageCommand;
+import com.example.interview.videopage.VideoPageFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -12,7 +14,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new GetInitialVideoPageCommand()
-                .start(this, null);
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.container, new VideoPageFragment())
+                .commit();
+
+//        new GetInitialVideoPageCommand()
+//                .start(this, null);
     }
 }
