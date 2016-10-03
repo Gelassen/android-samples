@@ -56,14 +56,36 @@ public class Contract {
         return table.getSimpleName();
     }
 
+//    "source":"https://video.xx.fbcdn.net/v/t43.1792-2/14150942_1776455732634297_1815505872_n.mp4?efg=eyJybHIiOjE1MDAsInJsYSI6MTAyNCwidmVuY29kZV90YWciOiJzdmVfaGQifQ%3D%3D&rl=1500&vabr=418&oh=73568272c1705924dc034759d1147bc0&oe=57E78D90",
+//            "thumbnails":{ },
+//            "id":"1114853028599763"
 
-    public final static class TelNumbers extends Table {
+    public final static class VideoTable extends Table {
         public final static String ID = _ID;
         final static String _SQL_ID_TYPE = _PK_AUTOINCREMENT;
-        public final static String PHONE_NUMBER = "PHONE_NUMBER";
-        final static String _SQL_PHONE_NUMBER_TYPE = _TYPE_INTEGER;
-        public final static String PHONE_NUMBER_PRICE = "PHONE_NUMBER_PRICE";
-        public final static String PHONE_NUMBER_OWNER = "PHONE_NUMBER_OWNER";
+        public final static String VIDEO_SOURCE = "VIDEO_SOURCE";
     }
 
+//    "id":"1114854498599616",
+//            "height":360,
+//            "scale":1,
+//            "uri":"https://scontent.xx.fbcdn.net/v/t15.0-10/14270859_1114854531932946_1329933356_n.jpg?oh=21bc5f7481a55e4e556df9e932bbe0da&oe=5864F572",
+//            "width":640,
+//            "is_preferred":false
+
+    public final static class ThumbnailTable extends Table {
+        public final static String ID = _ID;
+        final static String _SQL_ID_TYPE = _PK_AUTOINCREMENT;
+        public final static String THUMBNAIL_SOURCE = "THUMBNAIL_SOURCE";
+        public final static String VIDEO_ID = "VIDEO_ID";
+        final static String _SQL_VIDEO_ID_TYPE = _TYPE_INTEGER;
+        public final static String HEIGHT = "HEIGHT";
+        final static String _SQL_HEIGHT_TYPE = _TYPE_INTEGER;
+        public final static String WIDTH = "WIDTH";
+        final static String _SQL_WIDTH_TYPE = _TYPE_INTEGER;
+        public final static String SCALE = "SCALE";
+        final static String _SQL_SCALE_TYPE = _TYPE_INTEGER;
+        public final static String IS_PREFERRED = "IS_PREFERRED";
+        final static String _SQL_IS_PREFERRED_TYPE = _TYPE_INTEGER;
+    }
 }

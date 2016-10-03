@@ -34,7 +34,7 @@ public class LibContentProvider extends ContentProvider {
         builder.setTables(table);
         String groupBy = null;
         switch (matchId) {
-            case MATCH_TEL_NUMBERS:
+            case MATCH_VIDEO:
                 // do what you want
                 break;
             default:
@@ -110,10 +110,12 @@ public class LibContentProvider extends ContentProvider {
         tables.put(code, tableName);
     }
 
-    private final static int MATCH_TEL_NUMBERS = 0x00000001;
+    private final static int MATCH_VIDEO = 0x00000001;
+    private final static int MATCH_THUMBNAIL = 0x00000002;
 
     static {
-        match(Contract.TelNumbers.class, MATCH_TEL_NUMBERS);
+        match(Contract.VideoTable.class, MATCH_VIDEO);
+        match(Contract.ThumbnailTable.class, MATCH_THUMBNAIL);
     }
 
 }
