@@ -1,5 +1,5 @@
 
-package com.example.interview.model;
+package com.example.interview.model.api;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,6 +1,7 @@
 package com.example.interview;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.StrictMode;
 
 import com.example.interview.entity.NetworkLibrary;
@@ -32,7 +33,7 @@ public class InterviewApplication extends Application {
                     .build());
             StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
                     .detectLeakedSqlLiteObjects()
-                    .detectLeakedClosableObjects()
+//                    .detectLeakedClosableObjects()
                     .penaltyLog()
                     .penaltyDeath()
                     .build());
@@ -43,8 +44,15 @@ public class InterviewApplication extends Application {
             refWatcher = LeakCanary.install(this);
         }
 
+    }
+
+    /**
+     * Should be run from separate thread
+     * */
+    public void initNetworkLibrary(Context context) {
+        if (networkLibrary != null) return;
         networkLibrary = new NetworkLibrary();
-        networkLibrary.init(this);
+        networkLibrary.init(context);
     }
 
     public NetworkLibrary getNetworkLibrary() {
@@ -56,4 +64,5 @@ public class InterviewApplication extends Application {
             refWatcher.watch(object);
         }
     }
+
 }

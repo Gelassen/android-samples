@@ -6,6 +6,9 @@ import android.net.NetworkInfo;
 import android.os.Parcelable;
 import android.os.ResultReceiver;
 
+import com.example.interview.InterviewApplication;
+import com.example.interview.entity.NetworkLibrary;
+
 public abstract class Command implements Parcelable{
 
     protected ResultReceiver resultReceiver;
@@ -24,6 +27,8 @@ public abstract class Command implements Parcelable{
     public void execute(Context context, ResultReceiver receiver) {
         this.context = context;
         this.resultReceiver = receiver;
+
+        ((InterviewApplication) context.getApplicationContext()).initNetworkLibrary(context);
     }
 
     protected void notifyListeners(final Status result) {

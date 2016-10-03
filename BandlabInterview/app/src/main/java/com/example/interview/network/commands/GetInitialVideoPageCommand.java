@@ -10,7 +10,7 @@ import com.example.interview.App;
 import com.example.interview.InterviewApplication;
 import com.example.interview.convertors.PageWithVideosToStorageConverter;
 import com.example.interview.entity.NetworkLibrary;
-import com.example.interview.model.PageWithVideos;
+import com.example.interview.model.api.PageWithVideos;
 import com.example.interview.network.Command;
 import com.example.interview.network.Status;
 

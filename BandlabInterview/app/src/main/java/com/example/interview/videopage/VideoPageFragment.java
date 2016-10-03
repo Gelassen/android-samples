@@ -1,16 +1,15 @@
 package com.example.interview.videopage;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.VideoView;
 
 import com.example.interview.R;
 import com.example.interview.Test;
+import com.example.interview.model.VideoItem;
 
 /**
  * The intent of this class is present UI and assign it with model for video page
@@ -19,7 +18,17 @@ import com.example.interview.Test;
  */
 public class VideoPageFragment extends Fragment {
 
+    private static final String EXTRA_PAYLOAD = "EXTRA_PAYLOAD";
+
     private VideoPagePresenter videoPagePresenter;
+
+    public static Fragment newInstance(VideoItem videoData) {
+        Fragment fragment = new VideoPageFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(EXTRA_PAYLOAD, videoData);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -32,8 +41,11 @@ public class VideoPageFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        VideoItem videoData = getArguments().getParcelable(EXTRA_PAYLOAD);
+
         VideoModel videoModel = new VideoModel();
-        videoModel.setUri(new Test().getUri());
+        videoModel.setUri(videoData.getSource());
+        videoData.setThumbnail(videoData.getThumbnail());
 
         videoPagePresenter = new VideoPagePresenter(view);
         videoPagePresenter.updateModel(videoModel);
@@ -57,4 +69,5 @@ public class VideoPageFragment extends Fragment {
         super.onDestroy();
         videoPagePresenter.onDestroy();
     }
+
 }

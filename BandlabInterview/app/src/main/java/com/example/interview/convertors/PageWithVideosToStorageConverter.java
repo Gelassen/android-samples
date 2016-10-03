@@ -4,8 +4,8 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 
-import com.example.interview.model.ThumbnailData;
-import com.example.interview.model.VideoData;
+import com.example.interview.model.api.ThumbnailData;
+import com.example.interview.model.api.VideoData;
 import com.example.interview.storage.Contract;
 
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class PageWithVideosToStorageConverter implements IConverter<List<VideoDa
         ContentValues contentValues = new ContentValues(7);
         contentValues.put(Contract.ThumbnailTable.ID, thumb.getId());
         contentValues.put(Contract.ThumbnailTable.HEIGHT, thumb.getHeight());
-        contentValues.put(Contract.ThumbnailTable.IS_PREFERRED, thumb.getIsPreferred());
+        contentValues.put(Contract.ThumbnailTable.IS_PREFERRED, thumb.getIsPreferred() ? 1 : 0);
         contentValues.put(Contract.ThumbnailTable.SCALE, thumb.getScale());
         contentValues.put(Contract.ThumbnailTable.THUMBNAIL_SOURCE, thumb.getUri());
         contentValues.put(Contract.ThumbnailTable.VIDEO_ID, videoId);

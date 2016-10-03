@@ -1,6 +1,6 @@
 package com.example.interview.network;
 
-import com.example.interview.model.PageWithVideos;
+import com.example.interview.model.api.PageWithVideos;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

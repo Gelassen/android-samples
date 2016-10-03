@@ -1,49 +1,49 @@
 
-package com.example.interview.model;
+package com.example.interview.model.api;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Paging {
+public class Cursors {
 
-    private Cursors cursors;
-    private String next;
+    private String before;
+    private String after;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * 
      * @return
-     *     The cursors
+     *     The before
      */
-    public Cursors getCursors() {
-        return cursors;
+    public String getBefore() {
+        return before;
     }
 
     /**
      * 
-     * @param cursors
-     *     The cursors
+     * @param before
+     *     The before
      */
-    public void setCursors(Cursors cursors) {
-        this.cursors = cursors;
+    public void setBefore(String before) {
+        this.before = before;
     }
 
     /**
      * 
      * @return
-     *     The next
+     *     The after
      */
-    public String getNext() {
-        return next;
+    public String getAfter() {
+        return after;
     }
 
     /**
      * 
-     * @param next
-     *     The next
+     * @param after
+     *     The after
      */
-    public void setNext(String next) {
-        this.next = next;
+    public void setAfter(String after) {
+        this.after = after;
     }
 
     public Map<String, Object> getAdditionalProperties() {

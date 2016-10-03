@@ -1,17 +1,18 @@
 
-package com.example.interview.model;
+package com.example.interview.model.api;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ThumbnailData {
+public class ThumbnailData implements Serializable {
 
     private String id;
     private Integer height;
     private Integer scale;
     private String uri;
     private Integer width;
-    private Boolean isPreferred;
+    private boolean isPreferred;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
@@ -109,7 +110,7 @@ public class ThumbnailData {
      * @return
      *     The isPreferred
      */
-    public Boolean getIsPreferred() {
+    public boolean getIsPreferred() {
         return isPreferred;
     }
 
@@ -118,7 +119,7 @@ public class ThumbnailData {
      * @param isPreferred
      *     The is_preferred
      */
-    public void setIsPreferred(Boolean isPreferred) {
+    public void setIsPreferred(boolean isPreferred) {
         this.isPreferred = isPreferred;
     }
 

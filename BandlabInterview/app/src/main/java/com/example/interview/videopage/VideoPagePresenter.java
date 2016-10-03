@@ -22,10 +22,9 @@ public class VideoPagePresenter implements
 
     public VideoPagePresenter(View view) {
         viewHolder = new VideoPageViewHolder(view);
-
+        viewHolder.setOnClickListener(this);
         viewHolder.getVideoView().setOnErrorListener(this);
         viewHolder.getVideoView().setOnPreparedListener(this);
-        viewHolder.getVideoView().setOnClickListener(this);
         viewHolder.getVideoView().setKeepScreenOn(true);
     }
 
@@ -37,12 +36,14 @@ public class VideoPagePresenter implements
         if (model == null || model.isInvalid()) return;
         viewHolder.getVideoView()
                 .setVideoPath(model.getUri());
+        viewHolder.showLoadingPlaceholder(true);
     }
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         Log.d(App.TAG, "onPrepared");
         viewHolder.getVideoView().start();
+        viewHolder.showLoadingPlaceholder(false);
     }
 
     @Override

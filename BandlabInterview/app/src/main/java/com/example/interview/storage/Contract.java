@@ -3,6 +3,7 @@ package com.example.interview.storage;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.view.View;
 
 public class Contract {
 
@@ -56,22 +57,11 @@ public class Contract {
         return table.getSimpleName();
     }
 
-//    "source":"https://video.xx.fbcdn.net/v/t43.1792-2/14150942_1776455732634297_1815505872_n.mp4?efg=eyJybHIiOjE1MDAsInJsYSI6MTAyNCwidmVuY29kZV90YWciOiJzdmVfaGQifQ%3D%3D&rl=1500&vabr=418&oh=73568272c1705924dc034759d1147bc0&oe=57E78D90",
-//            "thumbnails":{ },
-//            "id":"1114853028599763"
-
     public final static class VideoTable extends Table {
         public final static String ID = _ID;
         final static String _SQL_ID_TYPE = _PK_AUTOINCREMENT;
         public final static String VIDEO_SOURCE = "VIDEO_SOURCE";
     }
-
-//    "id":"1114854498599616",
-//            "height":360,
-//            "scale":1,
-//            "uri":"https://scontent.xx.fbcdn.net/v/t15.0-10/14270859_1114854531932946_1329933356_n.jpg?oh=21bc5f7481a55e4e556df9e932bbe0da&oe=5864F572",
-//            "width":640,
-//            "is_preferred":false
 
     public final static class ThumbnailTable extends Table {
         public final static String ID = _ID;
@@ -87,5 +77,13 @@ public class Contract {
         final static String _SQL_SCALE_TYPE = _TYPE_INTEGER;
         public final static String IS_PREFERRED = "IS_PREFERRED";
         final static String _SQL_IS_PREFERRED_TYPE = _TYPE_INTEGER;
+    }
+
+    public final static class VideoView extends View {
+        public final static String _SQL_VIEW_QUERY = "SELECT * FROM " + VideoTable.class.getSimpleName()
+                + " LEFT OUTER JOIN " + ThumbnailTable.class.getSimpleName()
+                + " ON " + VideoTable.class.getSimpleName() + "." + VideoTable.ID
+                + " = " + ThumbnailTable.class.getSimpleName() + "." + ThumbnailTable.VIDEO_ID
+                + " WHERE " + ThumbnailTable.class.getSimpleName() + "." + ThumbnailTable.IS_PREFERRED + "= 1";
     }
 }
