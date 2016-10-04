@@ -85,7 +85,30 @@ public class LibContentProvider extends ContentProvider {
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
-        return super.bulkInsert(uri, values);
+        int rowsInserted = 0;
+        if (values.length == 0) return rowsInserted;
+
+        SQLiteDatabase database = db.getWritableDatabase();
+        String table = getTable(matcher.match(uri));
+        try {
+            database.beginTransaction();
+
+            for (ContentValues cv : values) {
+                database.insertWithOnConflict(table, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+            }
+
+            rowsInserted = values.length;
+            database.setTransactionSuccessful();
+            if (rowsInserted > 0) {
+                notifyChange(uri, rowsInserted);
+            }
+        } catch (Exception ex) {
+            Log.e(App.TAG, "Failed to perform bulk insert", ex);
+        } finally {
+            database.endTransaction();
+        }
+
+        return rowsInserted;
     }
 
     private void notifyChange(final Uri uri, final int rows) {
@@ -95,26 +118,22 @@ public class LibContentProvider extends ContentProvider {
         }
     }
 
-    private static final HashMap<String, String> assigned = new HashMap<>();
-
-    static {
-        assigned.put(Contract.VideoTable.class.getSimpleName(), Contract.VideoView.class.getName());
-        assigned.put(Contract.VideoTable.class.getSimpleName(), Contract.VideoView.class.getName());
+    private Uri getAssignedUri(final int matchId) {
+        switch (matchId) {
+            case MATCH_VIDEO:
+                return Contract.contentUri(Contract.VideoView.class);
+            case MATCH_THUMBNAIL:
+                return Contract.contentUri(Contract.VideoView.class);
+            default:
+                return null;
+        }
     }
 
     private void notifyAssignedChange(final Uri uri, final int rows) {
-        try {
-            String table = uri.getLastPathSegment();
-            String assignedTable = assigned.get(table);
-            if (assignedTable == null)
-                throw new IllegalArgumentException("Tables doesn't exist for table" + table);
-
-            Class clazz = Class.forName(table);
-            cr.notifyChange(Contract.contentUri(clazz), null);
-        } catch (ClassNotFoundException e) {
-            Log.e(App.TAG, "Failed to obtain class");
-        }
-
+        Uri assignedUri = getAssignedUri(matcher.match(uri));
+        Log.d(App.TAG, "Notify assigned uri: " + assignedUri);
+        if (assignedUri != null)
+            cr.notifyChange(assignedUri, null);
     }
 
     private String getTable(final int matchId) {

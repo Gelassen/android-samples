@@ -5,7 +5,12 @@ package com.example.interview;
  */
 public class Test {
 
-    public String getUri() {
+    public static String getUri() {
         return "https://video.xx.fbcdn.net/v/t43.1792-2/14150942_1776455732634297_1815505872_n.mp4?efg=eyJybHIiOjE1MDAsInJsYSI6MTAyNCwidmVuY29kZV90YWciOiJzdmVfaGQifQ%3D%3D&rl=1500&vabr=418&oh=5fd4e1739c433c6b4b10a8b169b333bd&oe=57F413D0";
+    }
+
+    public static String getThumb() {
+//        return "http://goo.gl/gEgYUd";
+        return "https://scontent.xx.fbcdn.net/v/t15.0-10/12323506_999675336784200_1959389375_n.jpg?oh=c9c1a9fde3e2e7178087802dea4e144f&oe=58A70575";
     }
 }

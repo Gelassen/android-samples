@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         new GetInitialVideoPageCommand()
                 .start(this, null);
 
-        getLoaderManager().restartLoader(TOKEN_THUMBS, Bundle.EMPTY, this);
-        getLoaderManager().restartLoader(TOKEN_VIDEO, Bundle.EMPTY, this);
+//        getLoaderManager().restartLoader(TOKEN_THUMBS, Bundle.EMPTY, this);
+//        getLoaderManager().restartLoader(TOKEN_VIDEO, Bundle.EMPTY, this);
         getLoaderManager().restartLoader(TOKEN_VIEW, Bundle.EMPTY, this);
     }
 
@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 Log.d(App.TAG, "Videos: " + videos);
                 break;
             case TOKEN_VIEW:
-//                Log.d(App.TAG, "View: " + tokens);
                 int tokens = cursor.getCount();
+                Log.d(App.TAG, "View: " + tokens);
                 CursorToVideoConverter converter = new CursorToVideoConverter();
                 converter.init(cursor);
 
