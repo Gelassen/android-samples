@@ -45,7 +45,7 @@ public class GetInitialVideoPageCommand extends Command {
                     status.add(Status.FAILED_TO_EXECUTE_REQUEST);
                 }
             } else {
-                Log.d(App.TAG, "Network is not available");
+                Log.e(App.TAG, "Network is not available");
                 status.add(Status.FAILED_NETWORK);
             }
         } catch (Exception ex) {

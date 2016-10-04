@@ -3,6 +3,7 @@ package com.example.interview.mainpage;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.interview.R;
 import com.example.interview.model.VideoItem;
@@ -19,14 +20,21 @@ public class MainPagerPresenter {
     private ViewPager viewPager;
     private VideoPageAdapter adapter;
 
+    private ProgressBar placeholder;
+
     public MainPagerPresenter(View view, FragmentManager fm) {
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        placeholder = (ProgressBar) view.findViewById(R.id.progress);
         adapter = new VideoPageAdapter(fm);
         viewPager.setAdapter(adapter);
     }
 
     public void addOnPageListener(ViewPager.OnPageChangeListener listener) {
         viewPager.addOnPageChangeListener(listener);
+    }
+
+    public void showPlaceholder(boolean show) {
+        placeholder.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     public void updateModel(List<VideoItem> model) {

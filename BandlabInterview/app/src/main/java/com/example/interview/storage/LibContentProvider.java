@@ -130,10 +130,14 @@ public class LibContentProvider extends ContentProvider {
     }
 
     private void notifyAssignedChange(final Uri uri, final int rows) {
-        Uri assignedUri = getAssignedUri(matcher.match(uri));
-        Log.d(App.TAG, "Notify assigned uri: " + assignedUri);
-        if (assignedUri != null)
-            cr.notifyChange(assignedUri, null);
+        try {
+            Uri assignedUri = getAssignedUri(matcher.match(uri));
+            Log.d(App.TAG, "Notify assigned uri: " + assignedUri);
+            if (assignedUri != null)
+                cr.notifyChange(assignedUri, null);
+        } catch (Exception ex) {
+            Log.e(App.TAG, "Faield ", ex);
+        }
     }
 
     private String getTable(final int matchId) {

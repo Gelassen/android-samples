@@ -8,6 +8,8 @@ public class Status {
     public static final int FAILED_NETWORK = 0;
     public static final int FAILED_TO_EXECUTE_REQUEST = 1;
 
+    private static final int SUCCESS = 200;
+
     private static final String NAMESPACE = Status.class.getName();
 
     private static final String CMD_STATUS_MSG = NAMESPACE.concat(".CMD_STATUS_MSG");
@@ -17,6 +19,7 @@ public class Status {
 
     public Status() {
         this.status = new Bundle();
+        add(SUCCESS);
     }
 
     private Status(Bundle extras) {
@@ -47,7 +50,7 @@ public class Status {
     }
 
     public boolean isSuccess() {
-        return 200 <= getStatusCode() && getStatusCode() < 300;
+        return getStatusCode() == SUCCESS;
     }
 
     public Object getExtra(final String extraField) {

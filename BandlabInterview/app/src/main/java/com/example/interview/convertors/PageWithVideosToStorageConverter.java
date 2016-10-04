@@ -3,7 +3,9 @@ package com.example.interview.convertors;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.util.Log;
 
+import com.example.interview.App;
 import com.example.interview.model.api.ThumbnailData;
 import com.example.interview.model.api.VideoData;
 import com.example.interview.storage.Contract;
@@ -72,12 +74,17 @@ public class PageWithVideosToStorageConverter implements IConverter<List<VideoDa
     }
 
     private void save() {
-        ContentValues[] videoContentValues = new ContentValues[videos.size()];
-        videos.toArray(videoContentValues);
-        cr.bulkInsert(Contract.contentUri(Contract.VideoTable.class), videoContentValues);
+        try {
+            ContentValues[] videoContentValues = new ContentValues[videos.size()];
+            videos.toArray(videoContentValues);
+            cr.bulkInsert(Contract.contentUri(Contract.VideoTable.class), videoContentValues);
 
-        ContentValues[] thumbContentValues = new ContentValues[thumbnails.size()];
-        thumbnails.toArray(thumbContentValues);
-        cr.bulkInsert(Contract.contentUri(Contract.ThumbnailTable.class), thumbContentValues);
+            ContentValues[] thumbContentValues = new ContentValues[thumbnails.size()];
+            thumbnails.toArray(thumbContentValues);
+            cr.bulkInsert(Contract.contentUri(Contract.ThumbnailTable.class), thumbContentValues);
+        } catch (Exception ex) {
+            Log.e(App.TAG, "Failed ", ex);
+        }
+
     }
 }
