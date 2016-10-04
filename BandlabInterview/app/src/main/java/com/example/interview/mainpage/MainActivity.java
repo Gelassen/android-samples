@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 findViewById(R.id.root),
                 getSupportFragmentManager()
         );
-        presenter.addOnPageListener(new VideoPageListener());
+        presenter.addOnPageListener(new VideoPageListener(this));
         converter = new CursorToVideoConverter();
 
         resultReceiver = new AppResultReceiver(new Handler());

@@ -15,6 +15,8 @@ public class VideoModel {
     private boolean isFirstStart;
     private ThumbnailData placeholderUri;
 
+    private int currentPosition;
+
     public VideoModel() {
         isFirstStart = true;
     }
@@ -47,4 +49,11 @@ public class VideoModel {
         isFirstStart = false;
     }
 
+    public void saveProgressState(int currentPosition) {
+        this.currentPosition = currentPosition;
+    }
+
+    public int getSavedPosition() {
+        return currentPosition;
+    }
 }

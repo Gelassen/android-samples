@@ -31,7 +31,7 @@ public class VideoPageAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         VideoItem videoData = dataSource.getItemForPosition(position);
-        return VideoPageFragment.newInstance(videoData);
+        return VideoPageFragment.newInstance(videoData, position);
     }
 
     @Override

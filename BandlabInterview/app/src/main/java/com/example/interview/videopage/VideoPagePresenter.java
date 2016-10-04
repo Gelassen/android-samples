@@ -3,6 +3,7 @@ package com.example.interview.videopage;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.View;
+import android.widget.MediaController;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -25,12 +26,17 @@ public class VideoPagePresenter implements
     private VideoPageViewHolder viewHolder;
     private VideoModel model;
 
+    private MediaController mediaController;
+
     public VideoPagePresenter(View view) {
         viewHolder = new VideoPageViewHolder(view);
         viewHolder.setOnClickListener(this);
         viewHolder.getVideoView().setOnErrorListener(this);
         viewHolder.getVideoView().setOnPreparedListener(this);
         viewHolder.getVideoView().setKeepScreenOn(true);
+
+        mediaController = new MediaController(view.getContext());
+        mediaController.setAnchorView(viewHolder.getVideoView());
     }
 
     public void updateModel(VideoModel videoModel) {
@@ -90,7 +96,7 @@ public class VideoPagePresenter implements
 
     public void onVideoPlay() {
         Log.d(App.TAG, "onVideoPlay");
-        viewHolder.getVideoView().resume();
+        viewHolder.getVideoView().seekTo(model.getSavedPosition());
         viewHolder.showVideo(true);
         viewHolder.showPlaceholder(false);
     }
@@ -100,6 +106,7 @@ public class VideoPagePresenter implements
         viewHolder.getVideoView().pause();
         viewHolder.showVideo(false);
         viewHolder.showPlaceholder(true);
+        model.saveProgressState(viewHolder.getVideoView().getCurrentPosition());
     }
 
     public void onResume() {

@@ -1,6 +1,16 @@
 package com.example.interview.mainpage;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+
+import com.example.interview.App;
+import com.example.interview.entity.Events;
+import com.example.interview.videopage.VideoPageFragment;
+
+import java.lang.ref.WeakReference;
 
 /**
  * The intent of this class is encapsulate biz logic which happens on each page swipe
@@ -9,9 +19,22 @@ import android.support.v4.view.ViewPager;
  */
 public class VideoPageListener extends ViewPager.SimpleOnPageChangeListener {
 
+    private WeakReference<Context> contextWeakRef;
+
+    public VideoPageListener(Context context) {
+        // for current use case it is ok to store simply Context, but it would be good
+        // to wrap it in weak reference to prevent memory leak for possible others use cases
+        contextWeakRef = new WeakReference<>(context);
+    }
 
     @Override
     public void onPageSelected(int position) {
-        // TODO stop previous one and
+        // notify listeners regarding this event
+        if (contextWeakRef.get() == null) return;
+
+        Log.d(App.TAG, "onPageSelected: " + position);
+
+        Events events = new Events();
+        events.broadcast(contextWeakRef.get(), events.getIntent(position));
     }
 }
