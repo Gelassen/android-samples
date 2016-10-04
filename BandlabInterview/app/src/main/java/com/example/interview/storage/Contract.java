@@ -84,6 +84,6 @@ public class Contract {
                 + " LEFT OUTER JOIN " + ThumbnailTable.class.getSimpleName()
                 + " ON " + VideoTable.class.getSimpleName() + "." + VideoTable.ID
                 + " = " + ThumbnailTable.class.getSimpleName() + "." + ThumbnailTable.VIDEO_ID
-                + " WHERE " + ThumbnailTable.class.getSimpleName() + "." + ThumbnailTable.IS_PREFERRED + "= 0";
+                + " WHERE " + ThumbnailTable.class.getSimpleName() + "." + ThumbnailTable.IS_PREFERRED + "= 1";
     }
 }

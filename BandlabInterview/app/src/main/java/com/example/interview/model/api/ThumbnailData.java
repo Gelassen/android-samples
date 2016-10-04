@@ -1,6 +1,9 @@
 
 package com.example.interview.model.api;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +15,8 @@ public class ThumbnailData implements Serializable {
     private Integer scale;
     private String uri;
     private Integer width;
+    @SerializedName("is_preferred")
+    @Expose
     private boolean isPreferred;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
