@@ -1,4 +1,4 @@
-package com.example.interview;
+package com.example.interview.mainpage;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
@@ -9,7 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.interview.App;
+import com.example.interview.R;
 import com.example.interview.convertors.storage.CursorToVideoConverter;
+import com.example.interview.mainpage.MainPagerPresenter;
+import com.example.interview.mainpage.VideoPageListener;
 import com.example.interview.model.VideoItem;
 import com.example.interview.network.commands.GetInitialVideoPageCommand;
 import com.example.interview.storage.Contract;
@@ -26,17 +30,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private List<VideoItem> model;
 
+    private MainPagerPresenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        presenter = new MainPagerPresenter(
+                findViewById(R.id.viewpager),
+                getSupportFragmentManager()
+        );
+        presenter.addOnPageListener(new VideoPageListener());
         converter = new CursorToVideoConverter();
 
-//        FragmentManager fm = getFragmentManager();
-//        fm.beginTransaction()
-//                .replace(R.id.container, new VideoPageFragment())
-//                .commit();
 
         new GetInitialVideoPageCommand()
                 .start(this, null);
@@ -75,11 +82,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 Log.d(App.TAG, "Videos: " + videos);
                 break;
             case TOKEN_VIEW:
+//                Log.d(App.TAG, "View: " + tokens);
                 int tokens = cursor.getCount();
                 CursorToVideoConverter converter = new CursorToVideoConverter();
                 converter.init(cursor);
-                List<VideoItem> data = converter.convert();
-                Log.d(App.TAG, "View: " + tokens);
+
+                model = converter.convert();
+                presenter.updateModel(model);
                 break;
         }
 //        converter.init(cursor);

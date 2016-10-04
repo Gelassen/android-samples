@@ -14,6 +14,9 @@ public class VideoItem implements Parcelable {
 
     private ThumbnailData thumbnail;
 
+    public VideoItem() {
+    }
+
     protected VideoItem(Parcel in) {
         id = in.readInt();
         source = in.readString();

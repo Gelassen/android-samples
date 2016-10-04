@@ -45,11 +45,11 @@ public class VideoPageFragment extends Fragment {
 
         VideoModel videoModel = new VideoModel();
         videoModel.setUri(videoData.getSource());
-        videoData.setThumbnail(videoData.getThumbnail());
+        videoModel.setPlaceholderUri(videoData.getThumbnail());
 
         videoPagePresenter = new VideoPagePresenter(view);
         videoPagePresenter.updateModel(videoModel);
-        videoPagePresenter.load();
+        videoPagePresenter.showPlaceholder(true);
     }
 
     @Override

@@ -5,6 +5,9 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.example.interview.R;
+import com.example.interview.model.VideoItem;
+
+import java.util.List;
 
 /**
  * The intent of this class is encapsulate UI for main page and expose API in
@@ -14,9 +17,20 @@ import com.example.interview.R;
  */
 public class MainPagerPresenter {
     private ViewPager viewPager;
+    private VideoPageAdapter adapter;
 
     public MainPagerPresenter(View view, FragmentManager fm) {
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        viewPager.setAdapter(new VideoPageAdapter(fm));
+        adapter = new VideoPageAdapter(fm);
+        viewPager.setAdapter(adapter);
+    }
+
+    public void addOnPageListener(ViewPager.OnPageChangeListener listener) {
+        viewPager.addOnPageChangeListener(listener);
+    }
+
+    public void updateModel(List<VideoItem> model) {
+        adapter.update(model);
+        adapter.notifyDataSetChanged();
     }
 }

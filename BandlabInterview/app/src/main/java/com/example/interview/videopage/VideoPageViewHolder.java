@@ -7,6 +7,8 @@ import android.widget.VideoView;
 
 import com.example.interview.R;
 
+import java.lang.ref.WeakReference;
+
 /**
  * The intent of this class is encapsulate UI and provides API in terms of business logic
  *
@@ -15,15 +17,17 @@ import com.example.interview.R;
 public class VideoPageViewHolder {
 
     private View root;
-    private VideoView videoView;
+    private WeakReference<VideoView> videoViewRef;
     private ImageView thumb;
     private ProgressBar loadingPlaceHolder;
 
     public VideoPageViewHolder(View view) {
         this.root = view.findViewById(R.id.root);
-        this.videoView = (VideoView) view.findViewById(R.id.video);
         this.thumb = (ImageView) view.findViewById(R.id.thumb);
         this.loadingPlaceHolder = (ProgressBar) view.findViewById(R.id.progress);
+
+        VideoView videoView = (VideoView) view.findViewById(R.id.video);
+        videoViewRef = new WeakReference<>(videoView);
     }
 
     public void setOnClickListener(View.OnClickListener onClickListener) {
@@ -31,11 +35,11 @@ public class VideoPageViewHolder {
     }
 
     public VideoView getVideoView() {
-        return videoView;
+        return videoViewRef.get();
     }
 
     public void showVideo(boolean show) {
-        videoView.setVisibility(show ? View.VISIBLE : View.GONE);
+        videoViewRef.get().setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     public void showPlaceholder(boolean show) {
@@ -44,5 +48,9 @@ public class VideoPageViewHolder {
 
     public void showLoadingPlaceholder(boolean show) {
         loadingPlaceHolder.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    public ImageView getPlaceholderView() {
+        return thumb;
     }
 }
