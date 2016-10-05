@@ -1,9 +1,13 @@
 package com.example.interview.videopage;
 
+import android.graphics.Matrix;
+import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.util.Log;
+import android.util.Pair;
+import android.view.Surface;
+import android.view.TextureView;
 import android.view.View;
-import android.widget.MediaController;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -11,6 +15,10 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.interview.App;
 import com.example.interview.R;
+import com.example.interview.convertors.VideoDimensToScaledDimenConverter;
+
+import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 
 /**
@@ -21,22 +29,32 @@ import com.example.interview.R;
 public class VideoPagePresenter implements
         MediaPlayer.OnPreparedListener,
         MediaPlayer.OnErrorListener,
+        TextureView.SurfaceTextureListener,
         View.OnClickListener {
+
+    public interface Callbacks {
+        void onReadyForStart();
+    }
 
     private VideoPageViewHolder viewHolder;
     private VideoModel model;
 
-    private MediaController mediaController;
+    private MediaPlayer mediaPlayer;
+    private VideoDimensToScaledDimenConverter converter;
+    private WeakReference<Callbacks> callbacksRef;
 
-    public VideoPagePresenter(View view) {
+    public VideoPagePresenter(View view, VideoDimensToScaledDimenConverter converter, Callbacks listener) {
         viewHolder = new VideoPageViewHolder(view);
         viewHolder.setOnClickListener(this);
-        viewHolder.getVideoView().setOnErrorListener(this);
-        viewHolder.getVideoView().setOnPreparedListener(this);
         viewHolder.getVideoView().setKeepScreenOn(true);
+        viewHolder.getVideoView().setSurfaceTextureListener(this);
 
-        mediaController = new MediaController(view.getContext());
-        mediaController.setAnchorView(viewHolder.getVideoView());
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setOnErrorListener(this);
+        mediaPlayer.setOnPreparedListener(this);
+
+        this.converter = converter;
+        callbacksRef = new WeakReference<>(listener);
     }
 
     public void updateModel(VideoModel videoModel) {
@@ -45,8 +63,11 @@ public class VideoPagePresenter implements
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-        Log.d(App.TAG, "onPrepared");
-        viewHolder.getVideoView().start();
+        Log.d(App.TAG, "Player onPrepared");
+        converter.init(new Pair<>(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight()));
+        applyScaleMatrix(converter.convert());
+        mediaPlayer.start();
+
         viewHolder.showPlaceholder(false);
         viewHolder.showLoadingPlaceholder(false);
     }
@@ -60,7 +81,7 @@ public class VideoPagePresenter implements
 
     @Override
     public void onClick(View view) {
-        boolean isPlaying = viewHolder.getVideoView().isPlaying();
+        boolean isPlaying = mediaPlayer.isPlaying();
         Log.d(App.TAG, "onClick:isPlaying " + isPlaying );
         if (model.isFirstStart()) {
             load();
@@ -70,6 +91,30 @@ public class VideoPagePresenter implements
         } else {
             onVideoPlay();
         }
+    }
+
+    @Override
+    public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
+        Log.d(App.TAG, "onSurfaceTextureAvailable");
+        Surface surface = new Surface(surfaceTexture);
+        mediaPlayer.setSurface(surface);
+        if (callbacksRef.get() != null) callbacksRef.get().onReadyForStart();
+    }
+
+    @Override
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i1) {
+        // no op
+    }
+
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
+        // no op
+        return false;
+    }
+
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+        // no op
     }
 
     public void showPlaceholder(boolean show) {
@@ -96,17 +141,15 @@ public class VideoPagePresenter implements
 
     public void onVideoPlay() {
         Log.d(App.TAG, "onVideoPlay");
-        viewHolder.getVideoView().seekTo(model.getSavedPosition());
+        mediaPlayer.start();
         viewHolder.showVideo(true);
         viewHolder.showPlaceholder(false);
     }
 
     public void onVideoPause() {
         Log.d(App.TAG, "onVideoPause");
-        viewHolder.getVideoView().pause();
-        viewHolder.showVideo(false);
-        viewHolder.showPlaceholder(true);
-        model.saveProgressState(viewHolder.getVideoView().getCurrentPosition());
+        mediaPlayer.pause();
+        model.saveProgressState(mediaPlayer.getCurrentPosition());
     }
 
     public void onResume() {
@@ -115,21 +158,31 @@ public class VideoPagePresenter implements
 
     public void onPause() {
         Log.d(App.TAG, "onPause");
-        viewHolder.getVideoView().pause();
+        mediaPlayer.pause();
         viewHolder.showVideo(false);
-        viewHolder.showPlaceholder(true);
     }
 
     public void onDestroy() {
         Log.d(App.TAG, "onDestroy");
-        viewHolder.getVideoView().stopPlayback();
+        mediaPlayer.stop();
     }
 
-    private void load() {
-        Log.d(App.TAG, "Load");
-        if (model == null || model.isInvalid()) return;
-        viewHolder.getVideoView()
-                .setVideoPath(model.getUri());
-        viewHolder.showLoadingPlaceholder(true);
+    public void load() {
+        if (!viewHolder.getVideoView().isAvailable()
+                || model == null || model.isInvalid()) return; // wait for texture view availability
+        try {
+            mediaPlayer.setDataSource(model.getUri());
+            mediaPlayer.prepareAsync();
+            viewHolder.showLoadingPlaceholder(true);
+        } catch (IOException e) {
+            Log.e(App.TAG, "Failed to load video", e);
+        }
+    }
+
+    private void applyScaleMatrix(Pair<Float, Float> scaled) {
+        Pair<Integer, Integer> display = converter.getDisplayDimensions();
+        Matrix transform = new Matrix();
+        transform.setScale(scaled.first, scaled.second, display.first / 2, display.second / 2);
+        viewHolder.getVideoView().setTransform(transform);
     }
 }

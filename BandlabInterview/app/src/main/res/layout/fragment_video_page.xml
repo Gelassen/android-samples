@@ -6,7 +6,7 @@
     android:background="@color/videoPageBackground"
     >
 
-    <VideoView
+    <TextureView
         android:id="@+id/video"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +20,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:layout_gravity="center"
+        android:visibility="gone"
         />
 
     <ProgressBar

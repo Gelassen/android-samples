@@ -3,20 +3,18 @@ package com.example.interview.videopage;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.interview.App;
-import com.example.interview.Params;
 import com.example.interview.R;
-import com.example.interview.Test;
+import com.example.interview.convertors.VideoDimensToScaledDimenConverter;
 import com.example.interview.entity.Events;
 import com.example.interview.model.VideoItem;
 
@@ -25,13 +23,12 @@ import com.example.interview.model.VideoItem;
  *
  * Created by John on 10/3/2016.
  */
-public class VideoPageFragment extends Fragment {
-
-    public static final String ACTION_NEW_PAGE_EVENT = "ACTION_NEW_PAGE_EVENT";
+public class VideoPageFragment extends Fragment implements VideoPagePresenter.Callbacks {
 
     private static final String EXTRA_PAYLOAD = "EXTRA_PAYLOAD";
     private static final String EXTRA_POSITION = "EXTRA_POSITION";
 
+    private VideoPageInteractor interactor;
     private VideoPagePresenter videoPagePresenter;
     private Events events;
 
@@ -56,12 +53,14 @@ public class VideoPageFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         VideoItem videoData = getArguments().getParcelable(EXTRA_PAYLOAD);
+        interactor = new VideoPageInteractor();
 
         VideoModel videoModel = new VideoModel();
         videoModel.setUri(videoData.getSource());
         videoModel.setPlaceholderUri(videoData.getThumbnail());
 
-        videoPagePresenter = new VideoPagePresenter(view);
+        Point point = interactor.getDisplaySize(getActivity());
+        videoPagePresenter = new VideoPagePresenter(view, new VideoDimensToScaledDimenConverter(point.x, point.y), this);
         videoPagePresenter.updateModel(videoModel);
         videoPagePresenter.showPlaceholder(true);
 
@@ -86,6 +85,11 @@ public class VideoPageFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         videoPagePresenter.onDestroy();
+    }
+
+    @Override
+    public void onReadyForStart() {
+//        videoPagePresenter.load();
     }
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {

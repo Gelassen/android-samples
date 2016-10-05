@@ -1,5 +1,6 @@
 package com.example.interview.videopage;
 
+import android.view.TextureView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -17,7 +18,7 @@ import java.lang.ref.WeakReference;
 public class VideoPageViewHolder {
 
     private View root;
-    private WeakReference<VideoView> videoViewRef;
+    private WeakReference<TextureView> videoViewRef;
     private ImageView thumb;
     private ProgressBar loadingPlaceHolder;
 
@@ -26,7 +27,7 @@ public class VideoPageViewHolder {
         this.thumb = (ImageView) view.findViewById(R.id.thumb);
         this.loadingPlaceHolder = (ProgressBar) view.findViewById(R.id.progress);
 
-        VideoView videoView = (VideoView) view.findViewById(R.id.video);
+        TextureView videoView = (TextureView) view.findViewById(R.id.video);
         videoViewRef = new WeakReference<>(videoView);
     }
 
@@ -34,7 +35,7 @@ public class VideoPageViewHolder {
         root.setOnClickListener(onClickListener);
     }
 
-    public VideoView getVideoView() {
+    public TextureView getVideoView() {
         return videoViewRef.get();
     }
 
