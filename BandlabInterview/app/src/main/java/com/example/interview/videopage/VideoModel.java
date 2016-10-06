@@ -45,6 +45,7 @@ public class VideoModel {
     }
 
     public boolean isInvalid() {
+        Log.d(App.TAG, "" + isInvalidState);
         return TextUtils.isEmpty(uri) || isInvalidState;
     }
 
@@ -69,8 +70,9 @@ public class VideoModel {
     /**
      * Can be caused by invalid data model or invalid app state, e.g. destroyed activity
      * */
-    public void  setInvalidState() {
-        isInvalidState = true;
+    public void  setInvalidState(boolean isInvalidState) {
+        Log.d(App.TAG, "" + isInvalidState);
+        this.isInvalidState = isInvalidState;
     }
 
     public boolean isPaused() {

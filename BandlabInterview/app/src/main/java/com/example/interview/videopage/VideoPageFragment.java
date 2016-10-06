@@ -96,8 +96,10 @@ public class VideoPageFragment extends Fragment implements VideoPagePresenter.Ca
     @Override
     public void onError() {
         Log.e(App.TAG, "Media player error");
-        Toast.makeText(getContext(), getString(R.string.error_failed_media), Toast.LENGTH_SHORT).show();
         videoPagePresenter.showPlaceholder(false);
+        if (isAdded())
+            Toast.makeText(getContext(), getString(R.string.error_failed_media), Toast.LENGTH_SHORT)
+                    .show();
     }
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {

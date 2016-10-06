@@ -1,5 +1,6 @@
 package com.example.interview.videopage;
 
+import android.app.Activity;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
@@ -66,6 +67,8 @@ public class VideoPagePresenter implements
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         Log.d(App.TAG, "Player onPrepared");
+        if (model.isInvalid()) return;
+
         converter.init(new Pair<>(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight()));
         applyScaleMatrix(converter.convert());
         mediaPlayer.start();
@@ -77,7 +80,7 @@ public class VideoPagePresenter implements
     @Override
     public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
         Log.d(App.TAG, "onError");
-        if (callbacksRef.get() != null) callbacksRef.get().onError();
+//        if (callbacksRef.get() != null) callbacksRef.get().onError();
         return false;
     }
 
@@ -120,6 +123,8 @@ public class VideoPagePresenter implements
     }
 
     public void showPlaceholder(boolean show) {
+//        if (model.isInvalid()) return;
+
         viewHolder.showPlaceholder(show);
         Glide.with(viewHolder.getVideoView().getContext())
                 .load(model.getPlaceholderUri())
@@ -150,16 +155,22 @@ public class VideoPagePresenter implements
 
     public void onVideoPause() {
         Log.d(App.TAG, "onVideoPause");
+//        if (!mediaPlayer.isPlaying()) return;
+
         mediaPlayer.pause();
         model.saveProgressState(mediaPlayer.getCurrentPosition());
     }
 
     public void onResume() {
         // TODO restore previous video state
+        model.setInvalidState(false);
     }
 
     public void onPause() {
         Log.d(App.TAG, "onPause");
+        model.setInvalidState(true);
+//        if (!mediaPlayer.isPlaying()) return;
+
         mediaPlayer.pause();
         viewHolder.showVideo(false);
     }
@@ -167,11 +178,12 @@ public class VideoPagePresenter implements
     public void onDestroy() {
         Log.d(App.TAG, "onDestroy");
         mediaPlayer.stop();
+        model.setInvalidState(false);
     }
 
     public void load() {
         if (!viewHolder.getVideoView().isAvailable()
-                || model == null || model.isInvalid()) return; // wait for texture view availability
+                || model == null /*|| model.isInvalid()*/) return; // wait for texture view availability
         try {
             mediaPlayer.setDataSource(model.getUri());
             mediaPlayer.prepareAsync();
@@ -182,9 +194,9 @@ public class VideoPagePresenter implements
     }
 
     private void applyScaleMatrix(Pair<Float, Float> scaled) {
-        Pair<Integer, Integer> display = converter.getDisplayDimensions();
-        Matrix transform = new Matrix();
-        transform.setScale(scaled.first, scaled.second, display.first / 2, display.second / 2);
-        viewHolder.getVideoView().setTransform(transform);
+//        Pair<Integer, Integer> display = converter.getDisplayDimensions();
+//        Matrix transform = new Matrix();
+//        transform.setScale(scaled.first, scaled.second, display.first / 2, display.second / 2);
+//        viewHolder.getVideoView().setTransform(transform);
     }
 }
