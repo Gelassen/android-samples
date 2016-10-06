@@ -67,7 +67,7 @@ public class GetInitialVideoPageCommand extends Command {
         // no op
     }
 
-    protected static final Parcelable.Creator<GetInitialVideoPageCommand> CREATOR = new Creator<GetInitialVideoPageCommand>() {
+    public static final Parcelable.Creator<GetInitialVideoPageCommand> CREATOR = new Creator<GetInitialVideoPageCommand>() {
         @Override
         public GetInitialVideoPageCommand createFromParcel(Parcel parcel) {
             return new GetInitialVideoPageCommand();
