@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.interview.App;
 import com.example.interview.R;
@@ -90,6 +91,13 @@ public class VideoPageFragment extends Fragment implements VideoPagePresenter.Ca
     @Override
     public void onReadyForStart() {
 //        videoPagePresenter.load();
+    }
+
+    @Override
+    public void onError() {
+        Log.e(App.TAG, "Media player error");
+        Toast.makeText(getContext(), getString(R.string.error_failed_media), Toast.LENGTH_SHORT).show();
+        videoPagePresenter.showPlaceholder(false);
     }
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {

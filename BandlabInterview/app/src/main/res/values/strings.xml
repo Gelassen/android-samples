@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Interview</string>
+    <string name="error_failed_media">Error due playing the media. Does you video file valid?</string>
 </resources>

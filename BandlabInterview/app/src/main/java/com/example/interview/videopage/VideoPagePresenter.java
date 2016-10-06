@@ -8,6 +8,7 @@ import android.util.Pair;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -34,6 +35,7 @@ public class VideoPagePresenter implements
 
     public interface Callbacks {
         void onReadyForStart();
+        void onError();
     }
 
     private VideoPageViewHolder viewHolder;
@@ -75,7 +77,7 @@ public class VideoPagePresenter implements
     @Override
     public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
         Log.d(App.TAG, "onError");
-        // TODO show error
+        if (callbacksRef.get() != null) callbacksRef.get().onError();
         return false;
     }
 
