@@ -1,7 +1,9 @@
 package com.example.interview.videopage;
 
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.example.interview.App;
 import com.example.interview.model.api.ThumbnailData;
 
 /**
@@ -12,13 +14,18 @@ import com.example.interview.model.api.ThumbnailData;
 public class VideoModel {
 
     private String uri;
-    private boolean isFirstStart;
     private ThumbnailData placeholderUri;
+
+    private boolean isFirstStart;
+    private boolean isInvalidState;
+    private boolean isPaused;
 
     private int currentPosition;
 
     public VideoModel() {
         isFirstStart = true;
+        isInvalidState = false;
+        isPaused = false;
     }
 
     public void setUri(String uri) {
@@ -38,7 +45,7 @@ public class VideoModel {
     }
 
     public boolean isInvalid() {
-        return TextUtils.isEmpty(uri);
+        return TextUtils.isEmpty(uri) || isInvalidState;
     }
 
     public boolean isFirstStart() {
@@ -46,6 +53,7 @@ public class VideoModel {
     }
 
     public void firstStartHappened() {
+        Log.d(App.TAG, "firstStartHappened for " + uri);
         isFirstStart = false;
     }
 
@@ -55,5 +63,21 @@ public class VideoModel {
 
     public int getSavedPosition() {
         return currentPosition;
+    }
+
+
+    /**
+     * Can be caused by invalid data model or invalid app state, e.g. destroyed activity
+     * */
+    public void  setInvalidState() {
+        isInvalidState = true;
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void setPaused(boolean paused) {
+        isPaused = paused;
     }
 }
