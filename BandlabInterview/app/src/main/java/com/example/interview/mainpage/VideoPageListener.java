@@ -30,11 +30,13 @@ public class VideoPageListener extends ViewPager.SimpleOnPageChangeListener {
     @Override
     public void onPageSelected(int position) {
         // notify listeners regarding this event
-        if (contextWeakRef.get() == null) return;
+        Context context = contextWeakRef.get();
+        if (context == null) return;
+
 
         Log.d(App.TAG, "onPageSelected: " + position);
 
         Events events = new Events();
-        events.broadcast(contextWeakRef.get(), events.getIntent(position));
+        events.broadcast(context, events.getIntent(position));
     }
 }

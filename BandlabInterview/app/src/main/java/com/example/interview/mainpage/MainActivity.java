@@ -64,6 +64,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.removePageLisener();
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int token, Bundle bundle) {
         Uri uri = null;
         switch (token) {

@@ -180,6 +180,7 @@ public class VideoPagePresenter implements
         Log.d(App.TAG, "onDestroy");
         mediaPlayer.stop();
         model.setInvalidState(true);
+        viewHolder.getVideoView().setSurfaceTextureListener(null);
     }
 
     public void load() {

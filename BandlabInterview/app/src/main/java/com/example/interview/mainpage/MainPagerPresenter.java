@@ -22,6 +22,8 @@ public class MainPagerPresenter {
 
     private ProgressBar placeholder;
 
+    private ViewPager.OnPageChangeListener listener;
+
     public MainPagerPresenter(View view, FragmentManager fm) {
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         placeholder = (ProgressBar) view.findViewById(R.id.progress);
@@ -30,7 +32,12 @@ public class MainPagerPresenter {
     }
 
     public void addOnPageListener(ViewPager.OnPageChangeListener listener) {
+        this.listener = listener;
         viewPager.addOnPageChangeListener(listener);
+    }
+
+    public void removePageLisener() {
+        viewPager.removeOnPageChangeListener(listener);
     }
 
     public void showPlaceholder(boolean show) {
