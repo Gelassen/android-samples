@@ -67,6 +67,7 @@ public class VideoPagePresenter implements
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         Log.d(App.TAG, "Player onPrepared");
+        viewHolder.showLoadingPlaceholder(false);
         if (model.isInvalid()) return;
 
         converter.init(new Pair<>(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight()));
@@ -74,7 +75,6 @@ public class VideoPagePresenter implements
         mediaPlayer.start();
 
         viewHolder.showPlaceholder(false);
-        viewHolder.showLoadingPlaceholder(false);
     }
 
     @Override
