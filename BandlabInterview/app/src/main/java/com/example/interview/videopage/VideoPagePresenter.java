@@ -155,7 +155,8 @@ public class VideoPagePresenter implements
 
     public void onVideoPause() {
         Log.d(App.TAG, "onVideoPause");
-//        if (!mediaPlayer.isPlaying()) return;
+        model.setInvalidState(true);
+        if (!mediaPlayer.isPlaying()) return;
 
         mediaPlayer.pause();
         model.saveProgressState(mediaPlayer.getCurrentPosition());
@@ -178,7 +179,7 @@ public class VideoPagePresenter implements
     public void onDestroy() {
         Log.d(App.TAG, "onDestroy");
         mediaPlayer.stop();
-        model.setInvalidState(false);
+        model.setInvalidState(true);
     }
 
     public void load() {
