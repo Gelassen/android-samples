@@ -10,7 +10,7 @@ import retrofit2.http.GET;
  */
 public interface ApiEndpointInterface {
 
-    @GET("gildor/fd94ee68a383ec269958288590c7683d/raw/dbe1c5c9146e0355f17457645ebb7aad7c30533c/videos.json")
+    @GET("gildor/02526b8f6495898bd8933d49a41c5991/raw/64c689cb2cfb9da3531d1d93eebfb11dffd0380b/videos.json")
     Call<PageWithVideos> getInitialPageWithVideos();
 
 }
