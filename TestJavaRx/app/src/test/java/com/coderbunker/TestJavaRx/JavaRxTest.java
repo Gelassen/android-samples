@@ -94,7 +94,7 @@ public class JavaRxTest extends BaseTest {
                 .when(model)
                 .getItems();
 
-        presenter.processData(); 
+        presenter.processData();
 
         Mockito.verify(view).showEmptyList();
     }

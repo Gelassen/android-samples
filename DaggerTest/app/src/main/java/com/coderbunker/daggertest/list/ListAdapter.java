@@ -21,8 +21,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     }
 
     public void updateModel(List<TestData> model) {
-        model.clear();
-        model.addAll(model);
+        this.model.clear();
+        this.model.addAll(model);
         notifyDataSetChanged();
     }
 

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.coderbunker.daggertest.MainActivity">
 
     <!--<TextView-->
@@ -12,6 +13,12 @@
         <!--android:layout_gravity="center"-->
         <!--android:text="Hello World!"-->
         <!--/>-->
+    <Button
+        android:id="@+id/upload_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="get data"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
@@ -19,4 +26,4 @@
         android:layout_height="match_parent"
         />
 
-</FrameLayout>
+</LinearLayout>

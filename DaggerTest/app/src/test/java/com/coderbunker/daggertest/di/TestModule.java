@@ -8,19 +8,15 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
+import static org.mockito.Mockito.mock;
+
 @Module
 public class TestModule {
 
     @Provides
     @Singleton
     public IModel getModel() {
-        return new StubModel();
+        return mock(IModel.class);
     }
 
-    private static class StubModel implements IModel {
-        @Override
-        public void generateModel() {
-            // no op
-        }
-    }
 }

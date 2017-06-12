@@ -5,6 +5,7 @@ import android.app.Application;
 
 import com.coderbunker.TestJavaRx.di.AppComponent;
 import com.coderbunker.TestJavaRx.di.DaggerAppComponent;
+import com.coderbunker.TestJavaRx.di.GeneralModel;
 
 public class App extends Application {
 
@@ -23,6 +24,8 @@ public class App extends Application {
     }
 
     protected AppComponent buildComponent() {
-        return DaggerAppComponent.builder().build();
+        return DaggerAppComponent.builder()
+                .generalModel(new GeneralModel(this))
+                .build();
     }
 }
