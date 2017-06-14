@@ -1,56 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
-    <Button
-        android:id="@+id/operators_map"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Run map"
-        />
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/operators_filter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Run filter"
-        />
+        <Button
+            android:id="@+id/operators_map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Run map"
+            />
 
-    <Button
-        android:id="@+id/operators_get_next"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Run skip and next"
-        />
+        <Button
+            android:id="@+id/operators_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Run filter"
+            />
 
-    <Button
-        android:id="@+id/operators_concat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Run concat"
-        />
+        <Button
+            android:id="@+id/operators_get_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Run skip and next"
+            />
 
-    <Button
-        android:id="@+id/operators_merge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Run merge"
-        />
+        <Button
+            android:id="@+id/operators_concat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Run concat"
+            />
 
-    <Button
-        android:id="@+id/operators_zip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Run zip"
-        />
+        <Button
+            android:id="@+id/operators_merge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Run merge"
+            />
 
-    <TextView
-        android:id="@+id/result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        <Button
+            android:id="@+id/operators_zip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Run zip"
+            />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/operators_cache"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Run from cache"
+            />
+
+        <Button
+            android:id="@+id/operators_exception"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Run with exception"
+            />
+
+
+        <Button
+            android:id="@+id/exception_propagate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Run with propagate exception"
+            />
+
+        <Button
+            android:id="@+id/exception_observable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Run with exception as observable"
+            />
+
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+</ScrollView>

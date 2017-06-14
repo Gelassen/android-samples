@@ -8,24 +8,25 @@ import com.coderbunker.javarxsample.dto.AirCompaniesItem;
 import com.coderbunker.javarxsample.dto.CityItem;
 import com.coderbunker.javarxsample.dto.ICommon;
 import com.coderbunker.javarxsample.model.Model;
-import com.coderbunker.javarxsample.test.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import rx.Observable;
 import rx.Observer;
-import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.exceptions.Exceptions;
 import rx.functions.Action1;
 import rx.functions.Func1;
-import rx.functions.Func2;
 import rx.functions.Func3;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+
+import static com.coderbunker.javarxsample.R.id.list;
 
 public class OperatorsPresenter implements IPresenter {
 
@@ -192,6 +193,134 @@ public class OperatorsPresenter implements IPresenter {
     }
 
     @Override
+    public void runDataFromCache() {
+        Subscription subscription = model.getModel().cache(2)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<CityItem>>() {
+                    @Override
+                    public void call(List<CityItem> cityItems) {
+                        view.showResult(buildResult(cityItems));
+                    }
+                });
+        subscriptions.add(subscription);
+    }
+
+    @Override
+    public void runDataWithException() {
+        model.getModel()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<List<CityItem>, List<CityItem>>() {
+                    @Override
+                    public List<CityItem> call(List<CityItem> cityItems) {
+                        Log.d(App.TAG, "Items: " + cityItems.size());
+                        if (cityItems.size() != 0) {
+                            throw new IllegalStateException("This exception should be handled");
+                        } else {
+                            return cityItems;
+                        }
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<CityItem>>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(App.TAG, "onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(App.TAG, "onCompleted", e);
+                    }
+
+                    @Override
+                    public void onNext(List<CityItem> cityItems) {
+                        Log.d(App.TAG, "onNext:size: " + cityItems.size());
+                    }
+                });
+    }
+
+    @Override
+    public void runWithExceptionPropagate() {
+        model.getModel().map(new Func1<List<CityItem>, List<CityItem>>() {
+            @Override
+            public List<CityItem> call(List<CityItem> cityItems) {
+                try {
+                    throw new ExecutionException("Execution exception", new Throwable());
+                } catch (ExecutionException ex) {
+                    Log.e(App.TAG, "Failed to run operation", ex);
+                    throw Exceptions.propagate(ex);
+                }
+            }
+        })
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<CityItem>>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(App.TAG, "onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(App.TAG, "onError", e);
+                    }
+
+                    @Override
+                    public void onNext(List<CityItem> cityItems) {
+                        Log.d(App.TAG, "onNext: " + cityItems.size());
+                    }
+                })
+        ;
+    }
+
+    @Override
+    public void runWithExceptionObservable() {
+        final boolean isErrorEmulated = false;
+        Subscription subscription = model.getModel()
+                .flatMap(new Func1<List<CityItem>, Observable<?>>() {
+                    @Override
+                    public Observable<List<CityItem>> call(List<CityItem> cityItems) {
+                        if (isErrorEmulated) {
+                            return Observable.error(new Throwable("throwable"));
+                        } else {
+                            return Observable.just(cityItems);
+                        }
+                    }
+                })
+                .toList()
+                .flatMap(new Func1<List<Object>, Observable<CityItem>>() {
+                    @Override
+                    public Observable<CityItem> call(List<Object> o) {
+                        List<? extends Object> list = o;
+                        List<CityItem> items = (List<CityItem>) list;
+                        return Observable.from(items);
+                    }
+                })
+                .toList()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<CityItem>>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(App.TAG, "onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(App.TAG, "onError", e);
+                    }
+
+                    @Override
+                    public void onNext(List<CityItem> cityItems) {
+                        Log.d(App.TAG, "City items: " + cityItems.size());
+                    }
+                });
+        subscriptions.add(subscription);
+    }
+
+    @Override
     public void showResult(List<CityItem> result) {
     }
 
@@ -200,6 +329,7 @@ public class OperatorsPresenter implements IPresenter {
         Log.d(App.TAG, "onDestroy");
         if (subscriptions != null && !subscriptions.isUnsubscribed()) {
             subscriptions.unsubscribe();
+            subscriptions.clear();
         }
     }
 

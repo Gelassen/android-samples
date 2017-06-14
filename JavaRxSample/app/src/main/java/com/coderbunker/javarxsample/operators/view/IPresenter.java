@@ -14,4 +14,8 @@ public interface IPresenter {
     void runConcat();
     void runMerge();
     void runZip();
+    void runDataFromCache();
+    void runDataWithException();
+    void runWithExceptionPropagate();
+    void runWithExceptionObservable();
 }

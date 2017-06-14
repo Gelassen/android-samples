@@ -91,8 +91,41 @@ public class OperatorsActivity extends BaseActivity implements IView{
             }
         });
 
+        findViewById(R.id.operators_cache)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        presenter.runDataFromCache();
+                    }
+                });
+
+        findViewById(R.id.operators_exception)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        presenter.runDataWithException();
+                    }
+                });
+
+        findViewById(R.id.exception_propagate)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        presenter.runWithExceptionPropagate();
+                    }
+                });
+
+        findViewById(R.id.exception_observable)
+                .setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.runWithExceptionObservable();
+            }
+        });
+
         resultView = (TextView) findViewById(R.id.result);
     }
+
 
     @Override
     protected void onDestroy() {
