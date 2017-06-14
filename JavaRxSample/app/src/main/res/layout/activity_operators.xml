@@ -12,6 +12,41 @@
         android:text="Run map"
         />
 
+    <Button
+        android:id="@+id/operators_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run filter"
+        />
+
+    <Button
+        android:id="@+id/operators_get_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run skip and next"
+        />
+
+    <Button
+        android:id="@+id/operators_concat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run concat"
+        />
+
+    <Button
+        android:id="@+id/operators_merge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run merge"
+        />
+
+    <Button
+        android:id="@+id/operators_zip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run zip"
+        />
+
     <TextView
         android:id="@+id/result"
         android:layout_width="match_parent"

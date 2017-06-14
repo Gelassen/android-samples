@@ -1,7 +1,7 @@
 package com.coderbunker.javarxsample.citylist.view;
 
 
-import com.coderbunker.javarxsample.citylist.dto.CityItem;
+import com.coderbunker.javarxsample.dto.CityItem;
 
 import java.util.List;
 

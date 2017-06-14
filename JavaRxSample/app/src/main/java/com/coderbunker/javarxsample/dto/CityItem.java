@@ -1,7 +1,7 @@
-package com.coderbunker.javarxsample.citylist.dto;
+package com.coderbunker.javarxsample.dto;
 
 
-public class CityItem {
+public class CityItem implements ICommon {
     private String city;
 
     public String getCity() {

@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.coderbunker.javarxsample.App;
 import com.coderbunker.javarxsample.R;
-import com.coderbunker.javarxsample.citylist.dto.CityItem;
+import com.coderbunker.javarxsample.dto.CityItem;
 import com.coderbunker.javarxsample.citylist.view.CityListAdapter;
 import com.coderbunker.javarxsample.citylist.view.CityListPresenter;
 import com.coderbunker.javarxsample.citylist.view.IPresenter;

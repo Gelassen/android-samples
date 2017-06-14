@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.coderbunker.javarxsample.App;
 import com.coderbunker.javarxsample.R;
-import com.coderbunker.javarxsample.citylist.dto.CityItem;
+import com.coderbunker.javarxsample.dto.CityItem;
 
 import java.util.ArrayList;
 import java.util.List;

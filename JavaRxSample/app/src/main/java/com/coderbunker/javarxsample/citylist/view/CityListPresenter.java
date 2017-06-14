@@ -4,8 +4,8 @@ package com.coderbunker.javarxsample.citylist.view;
 import android.util.Log;
 
 import com.coderbunker.javarxsample.App;
-import com.coderbunker.javarxsample.citylist.dto.CityItem;
-import com.coderbunker.javarxsample.citylist.model.Model;
+import com.coderbunker.javarxsample.dto.CityItem;
+import com.coderbunker.javarxsample.model.Model;
 
 import java.util.List;
 
