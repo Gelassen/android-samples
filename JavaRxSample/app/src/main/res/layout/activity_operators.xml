@@ -82,6 +82,48 @@
             android:text="Run with exception as observable"
             />
 
+        <Button
+            android:id="@+id/subject_publish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subject publish"
+            />
+
+        <Button
+            android:id="@+id/subject_reply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reply subject"
+            />
+
+        <Button
+            android:id="@+id/subject_behavior"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Behavior subject"
+            />
+
+        <Button
+            android:id="@+id/subject_async"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Async subject"
+            />
+
+        <Button
+            android:id="@+id/subject_observer_chain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Observer chain"
+            />
+
+        <Button
+            android:id="@+id/subject_observer_threads"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Observer threads"
+            />
+
         <TextView
             android:id="@+id/result"
             android:layout_width="match_parent"

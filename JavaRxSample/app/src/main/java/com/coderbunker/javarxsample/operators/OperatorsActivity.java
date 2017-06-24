@@ -14,9 +14,11 @@ import com.coderbunker.javarxsample.App;
 import com.coderbunker.javarxsample.BaseActivity;
 import com.coderbunker.javarxsample.R;
 import com.coderbunker.javarxsample.dto.CityItem;
-import com.coderbunker.javarxsample.operators.view.IPresenter;
+import com.coderbunker.javarxsample.operators.view.ICityPresenter;
+import com.coderbunker.javarxsample.operators.view.ISubjectPresenter;
 import com.coderbunker.javarxsample.operators.view.IView;
-import com.coderbunker.javarxsample.operators.view.OperatorsPresenter;
+import com.coderbunker.javarxsample.operators.view.OperatorsCityPresenter;
+import com.coderbunker.javarxsample.operators.view.SubjectPresenter;
 
 import java.util.List;
 
@@ -32,14 +34,16 @@ public class OperatorsActivity extends BaseActivity implements IView{
     private Button runNextItems;
     private TextView resultView;
 
-    private IPresenter presenter;
+    private ICityPresenter presenter;
+    private ISubjectPresenter subjectPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_operators);
 
-        presenter = new OperatorsPresenter(this);
+        presenter = new OperatorsCityPresenter(this);
+        subjectPresenter = new SubjectPresenter();
 
         runMap = (Button) findViewById(R.id.operators_map);
         runMap.setOnClickListener(new View.OnClickListener() {
@@ -122,6 +126,46 @@ public class OperatorsActivity extends BaseActivity implements IView{
                 presenter.runWithExceptionObservable();
             }
         });
+
+        findViewById(R.id.subject_publish)
+                .setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                subjectPresenter.onPublishSubject();
+            }
+        });
+
+        findViewById(R.id.subject_reply)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        subjectPresenter.onReplySubject();
+                    }
+                });
+
+        findViewById(R.id.subject_async)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        subjectPresenter.onAsyncSubject();
+                    }
+                });
+
+        findViewById(R.id.subject_observer_chain)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        presenter.runConnectedObservable();
+                    }
+                });
+
+        findViewById(R.id.subject_observer_threads)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        presenter.runChainWithPartsInUIThread();
+                    }
+                });
 
         resultView = (TextView) findViewById(R.id.result);
     }

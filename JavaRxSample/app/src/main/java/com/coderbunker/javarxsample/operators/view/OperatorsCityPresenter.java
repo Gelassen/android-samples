@@ -26,16 +26,14 @@ import rx.functions.Func3;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-import static com.coderbunker.javarxsample.R.id.list;
-
-public class OperatorsPresenter implements IPresenter {
+public class OperatorsCityPresenter implements ICityPresenter {
 
     private IView view;
     private Model model;
 
     private CompositeSubscription subscriptions;
 
-    public OperatorsPresenter(IView view) {
+    public OperatorsCityPresenter(IView view) {
         this.view = view;
         this.model = new Model();
 
@@ -315,6 +313,74 @@ public class OperatorsPresenter implements IPresenter {
                     @Override
                     public void onNext(List<CityItem> cityItems) {
                         Log.d(App.TAG, "City items: " + cityItems.size());
+                    }
+                });
+        subscriptions.add(subscription);
+    }
+
+    @Override
+    public void runConnectedObservable() {
+        // TODO run connected observable
+        // TODO go through
+        Subscription subscription = model.getModel()
+                .flatMap(new Func1<List<CityItem>, Observable<List<AirCompaniesItem>>>() {
+                    @Override
+                    public Observable<List<AirCompaniesItem>> call(List<CityItem> cityItems) {
+                        Log.d(App.TAG, "call:Thread#1: " + Thread.currentThread().getId());
+                        CityItem item = cityItems.get(0);
+                        // TODO at this place you can get your trip id and run another observable call
+                        return model.getAirCompanies();
+                    }
+                })
+                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.computation())
+                .subscribe(new Action1<List<AirCompaniesItem>>() {
+                    @Override
+                    public void call(List<AirCompaniesItem> airCompaniesItems) {
+
+                    }
+                });
+        subscriptions.add(subscription);
+    }
+
+    @Override
+    public void runChainWithPartsInUIThread() {
+        Log.d(App.TAG, "============");
+        // TODO I want to run use case where part of logic is executed in main thread, another part at separate thread, and te last part in UI thread
+        // TODO is there is a difference between call to subscribeOn and only observeOn is enough? observeOn is enough
+        Subscription subscription = model.getModel()
+                .observeOn(Schedulers.io())
+                .flatMap(new Func1<List<CityItem>, Observable<List<CityItem>>>() {
+                    @Override
+                    public Observable<List<CityItem>> call(List<CityItem> cityItems) {
+                        Log.d(App.TAG, "First call: " + Thread.currentThread().getId());
+                        Log.d(App.TAG, "Process smth in separate thread");
+                        return Observable.just(cityItems);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<List<CityItem>, Observable<List<CityItem>>>() {
+                    @Override
+                    public Observable<List<CityItem>> call(List<CityItem> cityItems) {
+                        Log.d(App.TAG, "Second call: " + Thread.currentThread().getId());
+                        Log.d(App.TAG, "Process smth in main thread");
+                        return Observable.just(cityItems);
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .flatMap(new Func1<List<CityItem>, Observable<List<AirCompaniesItem>>>() {
+                    @Override
+                    public Observable<List<AirCompaniesItem>> call(List<CityItem> cityItems) {
+                        Log.d(App.TAG, "Third call: " + Thread.currentThread().getId());
+                        Log.d(App.TAG, "Process smth in separate thread");
+                        return model.getAirCompanies();
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<AirCompaniesItem>>() {
+                    @Override
+                    public void call(List<AirCompaniesItem> cityItems) {
+                        Log.d(App.TAG, "Thread subscribe: " + Thread.currentThread().getId());
                     }
                 });
         subscriptions.add(subscription);
