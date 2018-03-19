@@ -72,6 +72,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void onScale(View view) {
+        try {
+            String[] command = ffmpegCommands.getCompressCommand(
+                    Test.getTestVideo(),
+                    Test.getTestDestination(this)
+            );
+            videoLibManager.runCommandWithListener(this, command, listener);
+        } catch (FFmpegCommandAlreadyRunningException e) {
+            Log.e(App.TAG, "Failed to run command", e);
+        }
+    }
+
     private FFmpegExecuteResponseHandler listener = new FFmpegExecuteResponseHandler() {
         @Override
         public void onSuccess(String s) {

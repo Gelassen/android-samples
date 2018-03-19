@@ -9,11 +9,21 @@
         android:layout_height="wrap_content" />
 
     <Button
+        android:id="@+id/convert_video"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="Convert video"
         android:onClick="onConvert"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/convert_video"
+        android:layout_centerHorizontal="true"
+        android:text="Scale video"
+        android:onClick="onScale"
         />
 
 </RelativeLayout>

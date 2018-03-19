@@ -123,6 +123,6 @@ public class FfmpegCommandBuilder {
         public static final String AB = "-ab"; // TODO clarify what is it
         public static final String NUMBER_OF_AUDIO_CHANNELS = "-ac";
         public static final String AUDIO_SAMPLING_FREQUENCY = "-ar";
-        public static final String SCALE = "scale=";
+        public static final String SCALE = "-vf";//"scale=";
     }
 }

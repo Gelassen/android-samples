@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="api_key">854456447771-o2oc4uctck7ujludcphn2cmr0i8c5vq1.apps.googleusercontent.com </string>
+    <string name="api_drive">https://www.googleapis.com/drive/v2</string>
+    <string name="api_drive_files">files</string>
+</resources>

@@ -22,4 +22,9 @@ public class Test {
         File publicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         return new File(publicDir, "test.mp4").toString();
     }
+
+    public static final String getTestDestinationScale(Context context) {
+        File publicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        return new File(publicDir, "test_scale.mp4").toString();
+    }
 }

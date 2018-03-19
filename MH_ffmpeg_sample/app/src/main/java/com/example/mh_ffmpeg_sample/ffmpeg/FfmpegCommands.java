@@ -21,7 +21,7 @@ public class FfmpegCommands {
         ffmpegCommandBuilder.allowOverwrightFilesWithoutAsking();
         ffmpegCommandBuilder.setInputFile(from);
         ffmpegCommandBuilder.setStrict();
-        ffmpegCommandBuilder.setScaleVideo("320x640");
+//        ffmpegCommandBuilder.setScaleVideo("320x640");
 //        ffmpegCommandBuilder.setFrameSize("160x120");
         ffmpegCommandBuilder.setFrameRate("25");
         ffmpegCommandBuilder.setCodec("mpeg4");
@@ -31,6 +31,19 @@ public class FfmpegCommands {
         ffmpegCommandBuilder.setSampleFrequency("22050");
         ffmpegCommandBuilder.setDestination(to);
         return ffmpegCommandBuilder.build();
+    }
+
+    // scale=720x406,setdar=16:9
+    // ffmpeg -i input.jpg -vf scale=320:240 output_320x240.png
+    public String[] getScaleCommand(final String from, final String to) {
+        ffmpegCommandBuilder.setInputFile(from);
+        ffmpegCommandBuilder.setScaleVideo("scale=110:320");
+        ffmpegCommandBuilder.setDestination(to);
+        return ffmpegCommandBuilder.build();
+    }
+
+    public String[] getWatermarkCommand() {
+        return null;
     }
 
     public String[] getExtractAudioFromVideoCommand(final String from, final String to) {
