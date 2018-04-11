@@ -1,6 +1,5 @@
 package com.home.template.utils
 
-import com.home.template.films.response.Film
 import org.hamcrest.CoreMatchers.isA
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThat

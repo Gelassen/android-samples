@@ -2,12 +2,11 @@ package ru.surfstudio.standard.interactor.films.network.response
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.home.template.films.response.Film
+import com.home.template.films.storage.model.Film
 import com.home.template.utils.TransformUtil
 import com.home.template.utils.Transformable
-import io.reactivex.Observable
 
-class FilmsListResponse: Transformable<List<Film>> {
+class FilmsListResponse: Transformable<List<Film?>> {
 
     val defaultSize: Int = 20
 
@@ -27,7 +26,7 @@ class FilmsListResponse: Transformable<List<Film>> {
     @Expose
     var filmResponses: List<FilmResponse>? = null
 
-    override fun transform(): List<Film> {
+    override fun transform(): List<Film?> {
         return TransformUtil()
                 .transformCollection(filmResponses!!)
     }

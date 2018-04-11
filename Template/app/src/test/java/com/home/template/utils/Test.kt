@@ -1,7 +1,5 @@
 package com.home.template.utils
 
-import com.home.template.films.response.Film
-
 import org.hamcrest.CoreMatchers.instanceOf
 import org.junit.Assert.assertThat
 

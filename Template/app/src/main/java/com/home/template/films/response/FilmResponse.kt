@@ -1,7 +1,7 @@
 package ru.surfstudio.standard.interactor.films.network.response
 
 import com.google.gson.annotations.SerializedName
-import com.home.template.films.response.Film
+import com.home.template.films.storage.model.Film
 import com.home.template.utils.Transformable
 
 class FilmResponse
@@ -22,24 +22,25 @@ constructor(
         @SerializedName("release_date") var releaseDate: String? = null,
         var fav: Boolean = false
 
-) : Transformable<Film> {
-    override fun transform(): Film {
-        return Film(
-                voteCount,
-                id,
-                video,
-                voteAverage,
-                title,
-                popularity,
-                posterPath,
-                originalLanguage,
-                originalTitle,
-                genreIds,
-                backdropPath,
-                adult,
-                overview,
-                releaseDate,
-                false
-        )
+) : Transformable<Film?> {
+    override fun transform(): Film? {
+        return null
+//        return Film(
+//                voteCount,
+//                id,
+//                video,
+//                voteAverage,
+//                title,
+//                popularity,
+//                posterPath,
+//                originalLanguage,
+//                originalTitle,
+//                genreIds,
+//                backdropPath,
+//                adult,
+//                overview,
+//                releaseDate,
+//                false
+//        )
     }
 }
