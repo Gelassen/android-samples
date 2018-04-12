@@ -7,20 +7,30 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
 import com.home.template.films.storage.model.Film;
-import com.home.template.films.storage.model.FilmWithMeta;
-import com.home.template.films.storage.model.Meta;
+import com.home.template.films.storage.model.User;
+import com.home.template.films.storage.model.UserFilms;
 import com.home.template.films.storage.model.UserWithFilms;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 import java.util.List;
+
 
 @Dao
 public interface FilmsDaoJ {
 
     @Insert
+    void insertAllFilms(@NotNull Collection<? extends Film> films);
+
+    @Insert
     void insertAllFilms(Film... films);
 
     @Insert
-    void insertAllMeta(Meta... metas);
+    void insertAllUsers(@NotNull User userFirst, @NotNull User userSecond);
+
+    @Query("SELECT * FROM users")
+    List<User> getAllUser();
 
     @Delete
     void delete(Film film);
@@ -31,9 +41,15 @@ public interface FilmsDaoJ {
     @Query("SELECT * FROM films WHERE title LIKE :title")
     List<Film> getAllFilmWithTitle(String title);
 
-    @Query("SELECT meta.*, films.* FROM meta INNER JOIN films ON films.title=meta.name")
-    List<FilmWithMeta> getAllFilmsWithMeta();
+    @Insert
+    void insertUserFilms(UserFilms data);
+
+    @Query("SELECT * FROM films INNER JOIN user_films ON films.userId = user_films.userId WHERE user_films.userId = :id")
+    List<UserFilms> getAllFilmsForUser(Integer id);
 
     @Query("SELECT user.* FROM user, films WHERE films.userId=user.id")
     List<UserWithFilms> getAllUserWithAllFilms();
+
+    @Query("SELECT * FROM user_films")
+    List<UserFilms> getAllUserFilms();
 }

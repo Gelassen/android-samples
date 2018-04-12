@@ -2,32 +2,27 @@ package com.home.template.films.storage.model;
 
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
-@Entity(tableName = "user",
-        foreignKeys = @ForeignKey(
-        entity = Film.class,
-        parentColumns = "userId",
-        childColumns = "id"))
+@Entity(tableName = "users")
 public class User {
     @PrimaryKey
     @NotNull
-    private String id;
+    private Integer id;
     private String name;
     private String description;
 
     public User() {
-        this.id = "";
+        this.id = 0;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

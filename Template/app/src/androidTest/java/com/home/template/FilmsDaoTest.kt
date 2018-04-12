@@ -7,8 +7,9 @@ import android.util.Log
 
 import com.home.template.films.storage.FilmsDaoJ
 import com.home.template.films.storage.FilmsDatabaseJ
+import com.home.template.films.storage.model.UserFilms
 import com.home.template.films.storage.model.Film
-import com.home.template.films.storage.model.Meta
+import com.home.template.films.storage.model.User
 
 import org.junit.After
 import org.junit.Before
@@ -103,35 +104,41 @@ open class FilmsDaoTest {
     }
 
     @Test
-    fun testGetFilmsWithMeta_threeFilmsTwoOfThemHasMeta_returnsThreeFilmsOneOfThemWithMeta() {
-        val firstFilm = Film()
-        firstFilm.title = "first film"
-        firstFilm.id = 1
-        val secondFilm = Film()
-        secondFilm.title = "second film"
-        secondFilm.id = 2
-        val thirdFilm = Film()
-        thirdFilm.title = "third film"
-        thirdFilm.id = 3
-        filmsDao!!.insertAllFilms(firstFilm, secondFilm, thirdFilm)
-        val firstMeta = Meta()
-        firstMeta.name = "first film"
-        firstMeta.desc = "first meta"
-        val secondMeta = Meta()
-        secondMeta.name = "second film"
-        secondMeta.desc = "second meta"
-        filmsDao!!.insertAllMeta(firstMeta, secondMeta)
+    fun testGetFilmsWithUsers_threeFilmsAndTwoAssignedOnUser_twoFilmsInResult() {
+        val userFirst = User()
+        userFirst.id = 1
+        userFirst.name = "first user"
+        userFirst.description = "desc"
+        val userSecond = User()
+        userSecond.id = 2
+        userSecond.name = "second user"
+        userSecond.description = "desc"
+        filmsDao!!.insertAllUsers(userFirst, userSecond)
 
-        val result = filmsDao!!.getAllFilmsWithMeta()
+        val filmFirst = Film()
+        filmFirst.id = 1
+        filmFirst.userId = 1
+        filmFirst.title = "first film"
+        val filmSecond = Film()
+        filmSecond.id = 2
+        filmSecond.title = "second film"
+        val filmThird = Film()
+        filmThird.id = 3
+        filmThird.title = "third"
+        filmsDao!!.insertAllFilms(filmFirst, filmSecond, filmThird)
 
-        assertEquals("first meta", result.get(0).meta.desc)
-        assertEquals("second meta", result.get(1).meta.desc)
+        filmsDao!!.insertUserFilms(UserFilms(1, 1))
+        filmsDao!!.insertUserFilms(UserFilms(1, 2))
+
+
+        val films = filmsDao!!.getAllFilm()
+        val users = filmsDao!!.getAllUser()
+        val filmsWithUsers = filmsDao!!.getAllFilmsForUser(1)
+        val userFilms = filmsDao!!.getAllUserFilms()
+
+        assertEquals(3, films.size)
+        assertEquals(2, users.size)
+        assertEquals(2, userFilms.size)
+        assertEquals(2, filmsWithUsers.size)
     }
-
-//    @Test
-//    fun testInsertUser_insertOneUserWithTwoFilms_bothUserAndFilmsInStorage() {
-//        val user = User()
-//        user.name = "debug"
-//    }
-
 }
