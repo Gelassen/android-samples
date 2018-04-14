@@ -47,7 +47,7 @@ open class FilmsDaoTest {
 
     @Test
     fun testGetAllFilms_noFilms_emptyCollection() {
-        val films = filmsDao!!.allFilm
+        val films = filmsDao!!.allFilms
 
         assertEquals(0, films.size.toLong())
     }
@@ -63,7 +63,7 @@ open class FilmsDaoTest {
 
         filmsDao!!.insertAllFilms(filmFirst, filmSecond)
 
-        val films = filmsDao!!.allFilm
+        val films = filmsDao!!.allFilms
         assertEquals(2, films.size)
     }
 
@@ -79,7 +79,7 @@ open class FilmsDaoTest {
 
         filmsDao!!.delete(filmFirst)
 
-        val films = filmsDao!!.allFilm
+        val films = filmsDao!!.allFilms
         assertEquals(1, films.size)
         assertEquals(2, films.get(0).id)
     }
@@ -131,7 +131,7 @@ open class FilmsDaoTest {
         filmsDao!!.insertUserFilms(UserFilms(1, 2))
 
 
-        val films = filmsDao!!.getAllFilm()
+        val films = filmsDao!!.getAllFilms()
         val users = filmsDao!!.getAllUser()
         val filmsWithUsers = filmsDao!!.getAllFilmsForUser(1)
         val userFilms = filmsDao!!.getAllUserFilms()

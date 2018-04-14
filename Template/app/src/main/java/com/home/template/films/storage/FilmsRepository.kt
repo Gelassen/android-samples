@@ -14,14 +14,14 @@ constructor(
         var database: FilmsDatabaseJ
 ){
 
-    fun insertFilms(films : Collection<Film>) {
-        Observable.fromCallable{database.filmsDao.insertAllFilms(films)}
+    fun insertFilms(films : Collection<Film>): Observable<Unit> {
+        return Observable.fromCallable{database.filmsDao.insertAllFilms(films)}
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
     }
 
-    fun getFilms() : Observable<MutableList<Film>>? {
-        return Observable.fromCallable{ database.filmsDao.allFilm }
+    fun getFilms() : Observable<MutableList<Film>> {
+        return Observable.fromCallable{ database.filmsDao.allFilms }
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
     }

@@ -36,7 +36,7 @@ public interface FilmsDaoJ {
     void delete(Film film);
 
     @Query("SELECT * FROM films")
-    List<Film> getAllFilm();
+    List<Film> getAllFilms();
 
     @Query("SELECT * FROM films WHERE title LIKE :title")
     List<Film> getAllFilmWithTitle(String title);
