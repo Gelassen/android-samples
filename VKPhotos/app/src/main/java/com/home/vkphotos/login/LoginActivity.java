@@ -17,16 +17,16 @@ import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 
-public class LoginActivity extends BaseActivity implements VKCallback<VKAccessToken> {
+public class LoginActivity extends BaseActivity implements VKCallback<VKAccessToken>, ILoginView {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
         VKSdk.initialize(this);
-        if (VKAccessToken.currentToken() == null) {
+        if (VKAccessToken.currentToken() != null) {
             FilmsActivity.start(this);
+            finish();
         } else {
             VKSdk.login(this, VKScope.PHOTOS);
         }
@@ -39,9 +39,12 @@ public class LoginActivity extends BaseActivity implements VKCallback<VKAccessTo
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, this)) {
             super.onActivityResult(requestCode, resultCode, data);
         } else {
+            finish();
             // TODO show snackbar
-            Toast.makeText(this, "Error to obtain the data", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Error to obtain the data", Toast.LENGTH_SHORT).show();
         }
+
+        VKSdk.initialize(null);
     }
 
     @Override
@@ -54,5 +57,25 @@ public class LoginActivity extends BaseActivity implements VKCallback<VKAccessTo
     @Override
     public void onError(VKError error) {
         Log.e(App.TAG, "onError: error: " + error);
+    }
+
+    @Override
+    public void launchMainScreen() {
+
+    }
+
+    @Override
+    public void showError() {
+
+    }
+
+    @Override
+    public void showEmailError() {
+
+    }
+
+    @Override
+    public void showPwdError() {
+
     }
 }

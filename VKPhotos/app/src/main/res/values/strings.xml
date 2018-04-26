@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">VK Photos</string>
+    <string name="url">https://api.vk.com/method/</string>
     <integer name="com_vk_sdk_AppId">6451625</integer>
 </resources>

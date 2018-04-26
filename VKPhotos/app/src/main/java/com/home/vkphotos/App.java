@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class App {
-    public static String TAG = "TAG";
+
+    public static final String CACHE = "CACHE";
+
+    public static final String TAG = "TAG";
 
     public static List<Item> generateDataset() {
         List<Item> results = new ArrayList<>();
