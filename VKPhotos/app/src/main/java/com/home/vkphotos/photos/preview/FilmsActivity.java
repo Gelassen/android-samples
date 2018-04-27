@@ -17,7 +17,6 @@ import com.home.vkphotos.R;
 import com.home.vkphotos.network.GetAllPhotos;
 import com.home.vkphotos.network.Status;
 import com.home.vkphotos.photos.model.Item;
-import com.squareup.leakcanary.LeakCanary;
 import com.vk.sdk.VKAccessToken;
 
 import java.util.ArrayList;
@@ -41,8 +40,6 @@ public class FilmsActivity extends AppCompatActivity implements
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        LeakCanary.refWatcher(this);
 
         resultReceiver = new AppResultReceiver(new Handler());
         resultReceiver.setListener(this);

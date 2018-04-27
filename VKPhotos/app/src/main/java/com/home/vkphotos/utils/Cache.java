@@ -3,7 +3,6 @@ package com.home.vkphotos.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.util.Log;
 
 import com.home.vkphotos.App;
