@@ -8,14 +8,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.home.vkphotos.photos.model.ImageBundle;
+import com.home.vkphotos.utils.ImageFetcher;
 import com.home.vkphotos.R;
-import com.home.vkphotos.photos.Item;
-import com.squareup.picasso.Picasso;
+import com.home.vkphotos.photos.model.Item;
 
 public class DetailedFragment extends Fragment {
 
     private static final String EXTRA = "EXTRA";
+
+    private ImageFetcher imageFetcher;
 
     public static DetailedFragment newInstance(Item item) {
         DetailedFragment fragment = new DetailedFragment();
@@ -38,11 +42,22 @@ public class DetailedFragment extends Fragment {
 
         Bundle bundle = getArguments();
         Item item = bundle.getParcelable(EXTRA);
+
+        TextView textView = view.findViewById(R.id.text);
+        textView.setText(item.getText());
+
         ImageView imageView = view.findViewById(R.id.detailed);
-        Picasso.get()
-                .load(item.getPhoto1280())
-                .fit()
-                .centerCrop()
-                .into(imageView);
+
+        ImageBundle imageBundle = new ImageBundle();
+        imageBundle.setUrl(item.getPhoto807());
+        imageFetcher.submit(imageView, imageBundle);
+
+
+
+//        Picasso.get().load(item.getPhoto807()).into(imageView);
+    }
+
+    public void setImageFetcher(ImageFetcher imageFetcher) {
+        this.imageFetcher = imageFetcher;
     }
 }

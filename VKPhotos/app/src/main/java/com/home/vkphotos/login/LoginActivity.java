@@ -17,7 +17,7 @@ import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 
-public class LoginActivity extends BaseActivity implements VKCallback<VKAccessToken>, ILoginView {
+public class LoginActivity extends BaseActivity implements VKCallback<VKAccessToken> {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,8 +40,6 @@ public class LoginActivity extends BaseActivity implements VKCallback<VKAccessTo
             super.onActivityResult(requestCode, resultCode, data);
         } else {
             finish();
-            // TODO show snackbar
-//            Toast.makeText(this, "Error to obtain the data", Toast.LENGTH_SHORT).show();
         }
 
         VKSdk.initialize(null);
@@ -59,23 +57,4 @@ public class LoginActivity extends BaseActivity implements VKCallback<VKAccessTo
         Log.e(App.TAG, "onError: error: " + error);
     }
 
-    @Override
-    public void launchMainScreen() {
-
-    }
-
-    @Override
-    public void showError() {
-
-    }
-
-    @Override
-    public void showEmailError() {
-
-    }
-
-    @Override
-    public void showPwdError() {
-
-    }
 }

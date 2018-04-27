@@ -11,6 +11,7 @@ public class AppResultReceiver extends ResultReceiver {
 
     public interface Listener {
         void onSuccess(Status status);
+        void onError();
     }
 
     private Listener listener;

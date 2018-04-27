@@ -1,4 +1,4 @@
-package com.home.vkphotos;
+package com.home.vkphotos.photos.model;
 
 
 public class ImageBundle {

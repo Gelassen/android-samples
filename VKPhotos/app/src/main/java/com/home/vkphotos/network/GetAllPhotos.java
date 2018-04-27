@@ -56,19 +56,13 @@ public class GetAllPhotos extends HttpCommand {
                 .build();
     }
 
-    // TODO handle null list there
-
     @Override
     protected void processRequest(okhttp3.Response response) {
         super.processRequest(response);
         try {
             JSONObject jObject = new JSONObject(response.body().string());
-
-            Log.e(App.TAG, "Response for page: " + offset + " \n " + jObject.toString());
-
             Response resp = new JsonToResponseConverter()
                     .convert(jObject);
-
             status.setPayload(new ArrayList<Parcelable>(resp.getItems()));
         } catch (JSONException e) {
             Log.e(App.TAG, "Failed to obtain data", e);

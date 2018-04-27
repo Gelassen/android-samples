@@ -1,4 +1,4 @@
-package com.home.vkphotos.photos;
+package com.home.vkphotos.photos.model;
 
 
 import android.os.Parcel;

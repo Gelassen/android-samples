@@ -2,7 +2,7 @@ package com.home.vkphotos.photos.preview;
 
 
 import com.google.gson.annotations.SerializedName;
-import com.home.vkphotos.photos.Item;
+import com.home.vkphotos.photos.model.Item;
 
 import java.util.List;
 

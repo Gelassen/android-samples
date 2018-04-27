@@ -1,6 +1,7 @@
 package com.home.vkphotos.photos.preview;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,25 +10,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.home.vkphotos.App;
-import com.home.vkphotos.ImageBundle;
-import com.home.vkphotos.ImageFetcherNew;
+import com.home.vkphotos.AppApplication;
+import com.home.vkphotos.photos.model.ImageBundle;
+import com.home.vkphotos.utils.ImageFetcher;
 import com.home.vkphotos.R;
 import com.home.vkphotos.photos.EndlessRecyclerViewScrollListener;
-import com.home.vkphotos.photos.Item;
+import com.home.vkphotos.photos.model.Item;
 import com.home.vkphotos.photos.detailed.DetailedActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder> {
 
-    private ImageFetcherNew imageFetcher;
+    @Inject
+    ImageFetcher imageFetcher;
 
-    public PhotoAdapter(Context context) {
-        imageFetcher = new ImageFetcherNew(context);
+    public PhotoAdapter(Activity context) {
+        imageFetcher = new ImageFetcher(context);
+
+        ((AppApplication) context.getApplication()).getAppComponent().inject(this);
     }
 
     public interface ShowMoreListener {
@@ -55,22 +61,11 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
 
     @Override
     public void onBindViewHolder(PhotoViewHolder holder, int position) {
-        final long sstart = System.currentTimeMillis();
-        Log.d(App.TAG, "onBindViewHolder:start " + sstart);
         final Item item = items.get(position);
 
-        Log.d(App.TAG, "Id: " + item.getId());
-//        Picasso.get()
-//                .load(item.getPhoto1280())
-//                .fit()
-//                .centerCrop()
-//                .into(holder.preview);
-
         ImageBundle bundle = new ImageBundle();
-        bundle.setUrl(item.getPhoto75());
-
+        bundle.setUrl(item.getPhoto604());
         imageFetcher.submit(holder.preview, bundle);
-//        imageFetcher.process(holder.preview, bundle);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,9 +73,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
                 DetailedActivity.start(view.getContext(), items, item.getId());
             }
         });
-        holder.order.setText(String.valueOf(item.getId()));
-        final long end = System.currentTimeMillis() - sstart;
-        Log.d(App.TAG, "onBindViewHolder:end:delta " + end);
     }
 
     @Override
@@ -95,6 +87,14 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
         initScrollListener(recyclerView, layoutManager);
     }
 
+    public void onResume() {
+        imageFetcher.onResume();
+    }
+
+    public void onPause() {
+        imageFetcher.onPause();
+    }
+
     private void initScrollListener(RecyclerView recyclerView, final LinearLayoutManager layoutManager) {
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
@@ -103,36 +103,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
                 onShowMoreListener.onShowMore();
             }
         });
-//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                if (onShowMoreListener != null /*&& !blockShowMoreEvent*/) {
-//                    int totalItemCount = layoutManager.getItemCount();
-//                    int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
-//                    int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
-//                    int numVisibleItem = lastVisibleItem - firstVisibleItem;
-//
-//                    int leftPart = totalItemCount - lastVisibleItem;
-//                    int rightPart = 2 * numVisibleItem;
-//                    if (leftPart < rightPart) {
-//                        blockShowMoreEvent = true;
-//                        onShowMoreListener.onShowMore();
-//                    }
-//                }
-//            }
-//        });
     }
 
     public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView preview;
-        private final TextView order;
 
         public PhotoViewHolder(View itemView) {
             super(itemView);
             preview = itemView.findViewById(R.id.preview);
-            order = itemView.findViewById(R.id.order);
         }
     }
 }

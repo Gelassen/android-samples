@@ -19,13 +19,9 @@ import com.home.vkphotos.Params;
 
 public class NetworkService extends Service {
 
-    private static final String NAMESPACE = NetworkService.class.getName();
-
     private static final long KEEP_ALIVE = 1;
     private static final int THREADS = 4;
     private static final int MAX_THREAD = 6;
-    
-    private WakeLock wakeLock;
 
     private final ConcurrentLinkedQueue<Integer> startIdQueue = new ConcurrentLinkedQueue<Integer>();
     private final ThreadPoolExecutor pool = new ThreadPoolExecutor(THREADS, MAX_THREAD, KEEP_ALIVE, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
@@ -49,13 +45,6 @@ public class NetworkService extends Service {
         super.onDestroy();
 
         Log.d(App.TAG, "Network service is destroyed");
-    }
-
-    @Override
-    @Deprecated
-    public void onStart(Intent intent, int startId) {
-        super.onStart(intent, startId);
-        processIntent(intent, startId);
     }
 
     @Override
