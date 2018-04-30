@@ -21,6 +21,7 @@ public class DetailedPagerAdapter extends FragmentPagerAdapter {
     @Inject
     ImageFetcher imageFetcher;
 
+
     public DetailedPagerAdapter(FragmentManager fm, AppApplication app) {
         super(fm);
         (app.getAppComponent()).inject(this);
@@ -42,5 +43,9 @@ public class DetailedPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return data.size();
+    }
+
+    public void onLowMemoryCall() {
+        imageFetcher.onLowMemoryCall();
     }
 }

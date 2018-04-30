@@ -1,15 +1,16 @@
 package com.home.vkphotos.photos.detailed;
 
 
+import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import com.home.vkphotos.AppApplication;
 import com.home.vkphotos.BaseActivity;
-import com.home.vkphotos.utils.ImageFetcher;
 import com.home.vkphotos.R;
 import com.home.vkphotos.photos.model.Item;
 
@@ -45,6 +46,12 @@ public class DetailedActivity extends BaseActivity {
         adapter.setData(getIntent().<Item>getParcelableArrayListExtra(EXTRA_DATA));
 
         viewPager.setCurrentItem(getSelectedPosition(items, id));
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        adapter.onLowMemoryCall();
     }
 
     private int getSelectedPosition(List<Item> items, final int selectedId) {

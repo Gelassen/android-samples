@@ -20,11 +20,18 @@ import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 public class Cache {
 
     private static final int CACHE_UP_LIMIT = 100 * 1024 * 1024;
+
+    private static final int IN_MEMORY_CACHE_LIMIT = 100;
+
+    private int limit = IN_MEMORY_CACHE_LIMIT;
+    private TreeMap<String, Bitmap> map = new TreeMap<>();
 
     private FileUtil fileUtil;
     private File cacheFile;
@@ -34,13 +41,31 @@ public class Cache {
         cacheFile = context.getCacheDir();
     }
 
+    public Bitmap getFromMemoryCache(final String key) {
+        if (!map.containsKey(key)) return null;
+        return map.get(key);
+    }
+
+    public void addInMemoryCache(String key, Bitmap bitmap) {
+        if (map.size() > limit) {
+            final int threshold = (int) (0.75 * limit);
+            while (map.size() > threshold) {
+                map.remove(map.firstKey());
+            }
+            map.put(key, bitmap);
+        } else {
+            map.put(key, bitmap);
+        }
+    }
+
     public void clean() {
         String[] files = getDirectory().list();
         Arrays.sort(files);
-        ArrayList list = (ArrayList) Arrays.asList(files);
+        ArrayList list = new ArrayList(Arrays.asList(files));
         for (int idx = 0; idx < list.size(); idx++) {
             list.remove(idx);
         }
+        map.clear();
     }
 
     public void add(final String key, InputStream is) {
@@ -62,7 +87,6 @@ public class Cache {
 
             // TODO check if there is no exceeding limit of the cache
             if (fileUtil.fileSize(getDirectory()) >= CACHE_UP_LIMIT) {
-                Log.e(App.CACHE, "Remove cached data");
                 removeCachedData();
             }
         } catch (FileNotFoundException e) {
@@ -78,6 +102,26 @@ public class Cache {
                 }
             }
         }
+        addInMemoryCache(key, getBitmapForCache(key));
+    }
+
+    private Bitmap getBitmapForCache(final String key) {
+        Bitmap bitmap = null;
+        FileLock fileLock = null;
+        RandomAccessFile file = null;
+        try {
+            file = new RandomAccessFile(new File(getDirectory(), generateFileName(key)), "rw");
+            FileChannel fileChannel = file.getChannel();
+            while((fileLock = fileChannel.tryLock()) == null) {
+                // no op, trying to obtain the lock
+            }
+            bitmap = BitmapFactory.decodeStream(Channels.newInputStream(fileChannel));
+        } catch (FileNotFoundException e) {
+            Log.e(App.TAG, "Failed to obtain data for cache", e);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 
     public Bitmap get(final String key, BitmapFactory.Options options, final int reqWidth, final int reqHeight) {
@@ -144,7 +188,7 @@ public class Cache {
     }
 
     private void removeCachedData() {
-        final int eightyPercent = (int) (0.8 * CACHE_UP_LIMIT);
+        final int eightyPercent = (int) (0.6 * CACHE_UP_LIMIT);
         String[] files = getDirectory().list();
         ArrayList list = new ArrayList<>(Arrays.asList(files));
         Collections.sort(list, new CachedFileComparator());

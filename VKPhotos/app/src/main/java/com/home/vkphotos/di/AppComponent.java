@@ -1,5 +1,6 @@
 package com.home.vkphotos.di;
 
+import com.home.vkphotos.photos.detailed.DetailedFragment;
 import com.home.vkphotos.photos.detailed.DetailedPagerAdapter;
 import com.home.vkphotos.photos.preview.FilmsActivity;
 import com.home.vkphotos.photos.preview.PhotoAdapter;
@@ -16,4 +17,6 @@ public interface AppComponent {
     void inject(PhotoAdapter photoAdapter);
 
     void inject(DetailedPagerAdapter detailedPagerAdapter);
+
+    void inject(DetailedFragment detailedFragment);
 }

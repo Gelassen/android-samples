@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.home.vkphotos.AppApplication;
 import com.home.vkphotos.photos.model.ImageBundle;
 import com.home.vkphotos.utils.ImageFetcher;
 import com.home.vkphotos.R;
@@ -40,6 +41,8 @@ public class DetailedFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ((AppApplication) getActivity().getApplication()).getAppComponent().inject(this);
+
         Bundle bundle = getArguments();
         Item item = bundle.getParcelable(EXTRA);
 
@@ -51,10 +54,12 @@ public class DetailedFragment extends Fragment {
         ImageBundle imageBundle = new ImageBundle();
         imageBundle.setUrl(item.getPhoto807());
         imageFetcher.submit(imageView, imageBundle);
+    }
 
-
-
-//        Picasso.get().load(item.getPhoto807()).into(imageView);
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        imageFetcher.onLowMemoryCall();
     }
 
     public void setImageFetcher(ImageFetcher imageFetcher) {

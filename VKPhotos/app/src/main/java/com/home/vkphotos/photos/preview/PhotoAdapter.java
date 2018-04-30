@@ -2,7 +2,6 @@ package com.home.vkphotos.photos.preview;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,12 +12,13 @@ import android.widget.ImageView;
 
 import com.home.vkphotos.App;
 import com.home.vkphotos.AppApplication;
-import com.home.vkphotos.photos.model.ImageBundle;
-import com.home.vkphotos.utils.ImageFetcher;
+import com.home.vkphotos.LifeCycleListener;
 import com.home.vkphotos.R;
 import com.home.vkphotos.photos.EndlessRecyclerViewScrollListener;
+import com.home.vkphotos.photos.model.ImageBundle;
 import com.home.vkphotos.photos.model.Item;
 import com.home.vkphotos.photos.detailed.DetailedActivity;
+import com.home.vkphotos.utils.ImageFetcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,19 +30,16 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
     @Inject
     ImageFetcher imageFetcher;
 
-    public PhotoAdapter(Activity context) {
-        imageFetcher = new ImageFetcher(context);
-
-        ((AppApplication) context.getApplication()).getAppComponent().inject(this);
-    }
-
-    public interface ShowMoreListener {
-        void onShowMore();
-    }
+    @Inject
+    LifeCycleListener lifeCycleListener;
 
     private ShowMoreListener onShowMoreListener;
 
-    private final ArrayList<Item> items = new ArrayList<>();
+    public final ArrayList<Item> items = new ArrayList<>();
+
+    public PhotoAdapter(Activity context) {
+        ((AppApplication) context.getApplication()).getAppComponent().inject(this);
+    }
 
     public void updateModel(List<Item> items) {
         this.items.addAll(items);
@@ -87,12 +84,18 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
         initScrollListener(recyclerView, layoutManager);
     }
 
-    public void onResume() {
-        imageFetcher.onResume();
+    public void onPause() {
+        imageFetcher.onCancel();
     }
 
-    public void onPause() {
-        imageFetcher.onPause();
+    public void onStopScroll() {
+        // turn off pause of image loading during scroll
+        /*imageFetcher.onResume();*/
+    }
+
+    public void onScroll() {
+        // turn off pause of image loading during scroll
+        /*imageFetcher.onPause();*/
     }
 
     private void initScrollListener(RecyclerView recyclerView, final LinearLayoutManager layoutManager) {
@@ -103,6 +106,10 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
                 onShowMoreListener.onShowMore();
             }
         });
+    }
+
+    public interface ShowMoreListener {
+        void onShowMore();
     }
 
     public class PhotoViewHolder extends RecyclerView.ViewHolder {

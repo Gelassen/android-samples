@@ -1,19 +1,16 @@
 package com.home.vkphotos.utils;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.home.vkphotos.App;
+import com.home.vkphotos.LifeCycleListener;
 import com.home.vkphotos.photos.model.ImageBundle;
 
 import java.io.ByteArrayInputStream;
@@ -23,10 +20,11 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ImageFetcher {
+public class ImageFetcher implements LifeCycleListener.LifeCycleCallbacks {
 
     private ExecutorService executors;
     private HashMap<Integer, AsyncWorker> asyncData;
@@ -35,10 +33,11 @@ public class ImageFetcher {
     private boolean isPausedWork = false;
     private Object pauseWorkLock = new Object();
 
-    public ImageFetcher(Context context) {
+    public ImageFetcher(Context context, LifeCycleListener lifeCycleListener) {
         cache = new Cache(context);
         asyncData = new HashMap<>();
-        executors = Executors.newFixedThreadPool(4);
+        lifeCycleListener.subscribe(this);
+        executors = Executors.newFixedThreadPool(8);
     }
 
     public void onPause() {
@@ -58,9 +57,27 @@ public class ImageFetcher {
         AsyncWorker worker = asyncData.get(imageView.hashCode());
         if (worker != null) worker.cancel(true);
 
+        imageView.setImageBitmap(null);
         worker = new AsyncWorker(imageView, imageBundle);
         worker.executeOnExecutor(executors);
         asyncData.put(imageView.hashCode(), worker);
+    }
+
+    @Override
+    public void onLowMemoryCall() {
+        cache.clean();
+    }
+
+    public void onCancel() {
+        onPause();
+
+        Set<Integer> keys = asyncData.keySet();
+        for (int id = 0; id < keys.size(); id++) {
+            AsyncWorker worker = asyncData.get(id);
+            worker.cancel(true);
+        }
+
+        onResume();
     }
 
     private class AsyncWorker extends AsyncTask<Void, Void, Bitmap> {
@@ -87,28 +104,38 @@ public class ImageFetcher {
                 }
             }
 
-            Bitmap bitmap = null;
-            try {
-                final BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inPreferredConfig = Bitmap.Config.RGB_565;
-                options.inJustDecodeBounds = true;
+            final String key = String.valueOf(imageBundle.getUrl().hashCode());
+            Bitmap bitmap = cache.getFromMemoryCache(key);
+            if (bitmap == null) {
+                try {
+                    final BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.RGB_565;
+                    options.inJustDecodeBounds = true;
 
-                imageView.get().measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-                final int reqWidth = imageView.get().getMeasuredWidth();
-                final int reqHeight = imageView.get().getMeasuredHeight();
+                    imageView.get().measure(
+                            View.MeasureSpec.UNSPECIFIED,
+                            View.MeasureSpec.UNSPECIFIED);
 
-                final String key = imageBundle.getUrl();
-                bitmap = cache.get(key, options, reqWidth, reqHeight);
-                if (bitmap == null) {
-                    Log.d(App.CACHE, "Get the fresh img");
-                    cache.add(key, bitmapToStream(makeWebRequest(imageBundle)));
+                    final int reqWidth = imageView.get().getMeasuredWidth();
+                    final int reqHeight = imageView.get().getMeasuredHeight();
+
                     bitmap = cache.get(key, options, reqWidth, reqHeight);
-                } else {
-                    Log.d(App.CACHE, "Hit the cache");
+                    if (bitmap == null) {
+                        cache.add(key, bitmapToStream(makeWebRequest(imageBundle)));
+                        bitmap = cache.get(key, options, reqWidth, reqHeight);
+                    } else {
+                        Log.d(App.TAG, "Hit the cache");
+                    }
+
+                    cache.addInMemoryCache(key, bitmap);
+                } catch (IOException e) {
+                    Log.e(App.TAG, "Failed to obtain bitmap", e);
                 }
-            } catch (IOException e) {
-                Log.e(App.TAG, "Failed to obtain bitmap", e);
+            } else {
+                Log.d(App.TAG, "Hit in memory cache");
             }
+
+            cache.getFromMemoryCache(String.valueOf(imageBundle.getUrl().hashCode()));
             return bitmap;
         }
 
@@ -116,22 +143,6 @@ public class ImageFetcher {
         protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
             if (isCancelled() || imageView.get() == null) return;
-
-
-//            @SuppressLint("ResourceAsColor") final TransitionDrawable td =
-//                    new TransitionDrawable(new Drawable[] {
-//                            new ColorDrawable(android.R.color.transparent),
-//                            new BitmapDrawable(imageView.get().getResources(), result)
-//                    });
-//            // Set background to loading bitmap
-////            imageView.setBackgroundDrawable(
-////                    new BitmapDrawable(mResources, mLoadingBitmap));
-//
-//            imageView.get().setImageDrawable(td);
-//            td.startTransition(100);
-//
-////            imageView.setImageDrawable(td);
-////            td.startTransition(FADE_IN_TIME);
 
             imageView.get().setImageDrawable(new BitmapDrawable(imageView.get().getResources(), result));
             imageView.get().setScaleType(ImageView.ScaleType.CENTER_CROP);
